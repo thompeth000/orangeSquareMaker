@@ -100,7 +100,7 @@ public abstract class Entity {
     public void updateTileMap(){
         for(int i = 0; i < collideableTiles.length; i++){
             for(int j = 0; j < collideableTiles[0].length; j++){
-                collideableTiles[i][j] = game.getTile(i ,j + (x / 20)).cloneTile();
+                collideableTiles[i][j] = game.getTile(i,j + (x / 20)).cloneTile();
             }
         }
     }

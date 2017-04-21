@@ -3,9 +3,9 @@ import java.awt.*;
 /**
  * Created by thompeth000 on 4/14/2017.
  */
-public class NullTile extends Entity implements Tile {
+public class AirTile extends Entity implements Tile {
 
-    public NullTile(Color color, int x, int y, int width, int height, Game game, int index){
+    public AirTile(Color color, int x, int y, int width, int height, Game game, int index){
         super( color, x, y, width, height, game, index);
 
     }
@@ -50,7 +50,7 @@ public class NullTile extends Entity implements Tile {
 
     @Override
     public Tile cloneTile() {
-        return new NullTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
+        return new AirTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
     }
 
 

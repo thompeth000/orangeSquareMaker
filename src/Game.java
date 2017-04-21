@@ -32,13 +32,13 @@ public class Game extends JPanel implements ActionListener {
 
         for(int i = 0; i < tileMap.length; i++){
             for(int j = 0; j < tileMap[0].length; j++){
-                tileMap[i][j] = new NullTile(Color.BLUE, j * 20, i * 20, 20, 20, this, 0);
+                tileMap[i][j] = new AirTile(Color.BLUE, j * 20, i * 20, 20, 20, this, 0);
             }
         }
 
         for(int i = 0; i < tileMap.length; i++){
             for(int j = 0; j < 20; j++){
-                tileMap[i][j] = new NullTile(Color.GREEN, j * 20, i * 20, 20, 20, this, 0);
+                tileMap[i][j] = new AirTile(Color.GREEN, j * 20, i * 20, 20, 20, this, 0);
             }
         }
 
@@ -191,7 +191,7 @@ public class Game extends JPanel implements ActionListener {
     public void initGame(){
 
         loadTiles(0);
-        addEntity(new Player(Color.ORANGE, 0, 0, 15, 40, this, 0));
+        //addEntity(new Player(Color.ORANGE, 0, 0, 15, 40, this, 0));
         timer = new Timer(1000/60, this);
         timer.start();
     }
@@ -221,7 +221,7 @@ public class Game extends JPanel implements ActionListener {
     public void loadTiles(int offset){
         for(int i = 0; i < loadedTiles.length; i++){
             for(int k = 0; k < 40; k++){
-                loadedTiles[i][k] = (tileMap[i][(offset / 20) + k]).cloneTile();
+                loadedTiles[i][k] = getTile(i, (offset / 20) + k).cloneTile();
                 loadedTiles[i][k].setPos(new TilePos(k, i, true));
             }
             System.out.println(offset);
@@ -276,7 +276,7 @@ public class Game extends JPanel implements ActionListener {
     public void updateSelectedTile(){
         switch(tileString){
             case "Erase":
-                selectedTile = new NullTile(Color.BLUE, 0, 0, 20, 20, this, 0);
+                selectedTile = new AirTile(Color.BLUE, 0, 0, 20, 20, this, 0);
                 break;
             case "Ground Tile":
                 selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
@@ -305,6 +305,10 @@ public class Game extends JPanel implements ActionListener {
         cameraOffset = a;
     }
 
+    public void addToOffset(int a){
+        cameraOffset += a;
+    }
+
     public void addEntity(Entity ent){
         entities.add(ent);
     }
@@ -321,7 +325,12 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public Tile getTile(int row, int col){
-        return tileMap[row][col];
+        try {
+            return tileMap[row][col];
+        }catch(ArrayIndexOutOfBoundsException e){
+            return new AirTile(Color.BLUE, col * 20, row * 20, 20, 20, this, 0);
+        }
+
     }
 
     public void decrementControlVariable(){
