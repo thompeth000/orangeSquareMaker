@@ -1,0 +1,333 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+
+/**
+ * Created by thompeth000 on 4/13/2017.
+ */
+public class Game extends JPanel implements ActionListener {
+
+    Color backColor = new Color(40,150,220);
+    Timer timer;
+    ArrayList<Entity> entities;
+    Tile[][] tileMap;
+    Tile[][] loadedTiles;
+    Tile selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
+    int cursorX, cursorY, cameraOffset, gameLoopControl;
+    boolean click, dPressed, aPressed;
+    String tileString = "Ground Tile";
+
+    public Game(){
+        JFrame frame = new JFrame();
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setTitle("SUPER ORANGE SQUARE MAKER");
+        setPreferredSize(new Dimension(800,600));
+        setBackground(backColor);
+        tileMap = new Tile[30][2048];
+        loadedTiles = new Tile[30][40];
+        cameraOffset = 0;
+
+        for(int i = 0; i < tileMap.length; i++){
+            for(int j = 0; j < tileMap[0].length; j++){
+                tileMap[i][j] = new NullTile(Color.BLUE, j * 20, i * 20, 20, 20, this, 0);
+            }
+        }
+
+        for(int i = 0; i < tileMap.length; i++){
+            for(int j = 0; j < 20; j++){
+                tileMap[i][j] = new NullTile(Color.GREEN, j * 20, i * 20, 20, 20, this, 0);
+            }
+        }
+
+
+
+        frame.add(this);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_D) {
+                dPressed = true;
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_A) {
+                aPressed = true;
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_1 && GameStats.isEditor()){
+                    tileString = "Ground Tile";
+                    updateSelectedTile();
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_2 && GameStats.isEditor()){
+                    tileString = "Lava Tile";
+                    updateSelectedTile();
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_3 && GameStats.isEditor()){
+                    tileString = "Coin";
+                    updateSelectedTile();
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_4 && GameStats.isEditor()){
+                    tileString = "Goal";
+                    updateSelectedTile();
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_0 && GameStats.isEditor()){
+                    tileString = "Erase";
+                    updateSelectedTile();
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+
+
+
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_P) {
+
+
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_SPACE){
+
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_D){
+                dPressed = false;
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_A){
+                aPressed = false;
+                }
+
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter(){
+            @Override
+            public void mouseMoved(MouseEvent e){
+                super.mouseMoved(e);
+                cursorX = e.getX();
+                cursorY = e.getY();
+            }
+        });
+
+        addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                if(e.getButton() == MouseEvent.BUTTON1){
+                    click = true;
+
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                if(e.getButton() == MouseEvent.BUTTON1){
+                    click = false;
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+            }
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                super.mouseWheelMoved(e);
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+            }
+        });
+
+    }
+
+    public static void main(String[] args){
+        Game game = new Game();
+        game.initGame();
+
+    }
+
+    public void initGame(){
+
+        loadTiles(0);
+        addEntity(new Player(Color.ORANGE, 0, 0, 15, 40, this, 0));
+        timer = new Timer(1000/60, this);
+        timer.start();
+    }
+
+    public Tile[][] getTileMap(){
+        return tileMap;
+    }
+
+    public void paint(Graphics g){
+        super.paint(g);
+        if(GameStats.isEditor() || GameStats.isPlay()) {
+            for (int i = 0; i < loadedTiles.length; i++) {
+                for (int k = 0; k < loadedTiles[0].length; k++) {
+                    (loadedTiles[i][k]).paint(g);
+                }
+            }
+        }
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Lucida Console", Font.BOLD, 24));
+        printSimpleString(tileString, getWidth(), -300, 20, g);
+    }
+
+    public int getNextIndex(){
+        return entities.size();
+    }
+
+    public void loadTiles(int offset){
+        for(int i = 0; i < loadedTiles.length; i++){
+            for(int k = 0; k < 40; k++){
+                loadedTiles[i][k] = (tileMap[i][(offset / 20) + k]).cloneTile();
+                loadedTiles[i][k].setPos(new TilePos(k, i, true));
+            }
+            System.out.println(offset);
+        }
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e){
+   if(GameStats.isEditor()) {
+       if (aPressed) {
+           cameraOffset -= 20;
+           System.out.println("A");
+           if (cameraOffset < 0) {
+               cameraOffset = 0;
+           }
+       }
+
+       if (dPressed) {
+           cameraOffset += 20;
+           System.out.println("D");
+       }
+
+       if (click) {
+           setTile(cursorX, cursorY, cameraOffset, selectedTile);
+       }
+
+   }
+
+   if(GameStats.isPlay()){
+       for(gameLoopControl = 0; gameLoopControl < getNextIndex(); gameLoopControl++){
+           entities.get(gameLoopControl).update(gameLoopControl);
+       }
+   }
+
+    repaint();
+
+    loadTiles(cameraOffset);
+
+    }
+
+    public void setTile(int x, int y, int offset, Tile selected){
+
+        int newX = x + offset;
+
+
+        tileMap[y / 20][(int)Math.floor(newX / 20.0)] = selected.cloneTile();
+        tileMap[y / 20][(int)Math.floor(newX / 20.0)].setPos(new TilePos(newX, y, false));
+
+    }
+
+    public void updateSelectedTile(){
+        switch(tileString){
+            case "Erase":
+                selectedTile = new NullTile(Color.BLUE, 0, 0, 20, 20, this, 0);
+                break;
+            case "Ground Tile":
+                selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
+                break;
+            case "Lava Tile":
+                selectedTile = new LavaTile(Color.RED, 0, 0, 20, 20, this, 0);
+                break;
+            case "Coin":
+                selectedTile = new CoinTile(Color.YELLOW, 0, 0, 20, 20, this, 0);
+                break;
+            case "Goal":
+                selectedTile = new GoalTile(new Color(255,0,255), 0, 0, 20, 20, this, 0);
+                break;
+            default:
+                selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
+        }
+    }
+
+    private void printSimpleString(String s, int width, int xPos, int yPos, Graphics g2d){
+        int stringLen = (int)g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+        int start = width / 2 - stringLen / 2;
+        g2d.drawString(s, start + xPos, yPos);
+    }
+
+    public void setOffset(int a){
+        cameraOffset = a;
+    }
+
+    public void addEntity(Entity ent){
+        entities.add(ent);
+    }
+
+    public void removeEntity(int index){
+        entities.remove(index);
+        for(int i = index; i < entities.size(); i++) {
+            entities.get(i).decrementIndex();
+        }
+    }
+
+    public Entity getEntity(int index){
+        return entities.get(index);
+    }
+
+    public Tile getTile(int row, int col){
+        return tileMap[row][col];
+    }
+
+    public void decrementControlVariable(){
+        gameLoopControl--;
+    }
+
+
+
+}
