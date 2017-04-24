@@ -16,5 +16,7 @@ public interface Tile {
 
     public void paint(Graphics g);
 
+    public void offsetPos(int offset);
+
     public Tile cloneTile();
 }

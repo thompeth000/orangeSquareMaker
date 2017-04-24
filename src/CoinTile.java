@@ -28,7 +28,7 @@ public class CoinTile extends Entity implements Tile {
 
     @Override
     public TilePos getPos() {
-        return null;
+        return new TilePos(getX() , getY(), false);
     }
 
     @Override
@@ -67,5 +67,10 @@ public class CoinTile extends Entity implements Tile {
         g.setColor(getColor());
         g.fillOval(getX(), getY(), getWidth(), getHeight());
 
+    }
+
+    @Override
+    public void offsetPos(int offset) {
+        setX((getX()) - (offset % 20));
     }
 }

@@ -16,6 +16,11 @@ public class AirTile extends Entity implements Tile {
     }
 
     @Override
+    public void offsetPos(int offset) {
+        setX((getX()) - (offset % 20));
+    }
+
+    @Override
     public void setPos(int row, int col) {
 
     }

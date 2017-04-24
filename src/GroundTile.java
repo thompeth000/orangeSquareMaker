@@ -15,6 +15,11 @@ public class GroundTile extends Entity implements Tile {
     }
 
     @Override
+    public void offsetPos(int offset) {
+        setX((getX()) - (offset % 20));
+    }
+
+    @Override
     public void setPos(int row, int col) {
 
     }
@@ -28,7 +33,7 @@ public class GroundTile extends Entity implements Tile {
 
     @Override
     public TilePos getPos() {
-        return null;
+        return new TilePos(getX() , getY(), false);
     }
 
     @Override
