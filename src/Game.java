@@ -16,7 +16,7 @@ public class Game extends JPanel implements ActionListener {
     Tile[][] loadedTiles;
     Tile selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
     int cursorX, cursorY, cameraOffset, gameLoopControl;
-    boolean click, dPressed, aPressed;
+    boolean click, dPressed, aPressed, playerSpawnPlaced;
     String tileString = "Ground Tile";
 
     public Game(){
@@ -29,6 +29,7 @@ public class Game extends JPanel implements ActionListener {
         tileMap = new Tile[30][2048];
         loadedTiles = new Tile[30][40];
         cameraOffset = 0;
+        playerSpawnPlaced = false;
 
         for(int i = 0; i < tileMap.length; i++){
             for(int j = 0; j < tileMap[0].length; j++){
@@ -84,6 +85,11 @@ public class Game extends JPanel implements ActionListener {
 
                 if(e.getKeyCode() == KeyEvent.VK_4 && GameStats.isEditor()){
                     tileString = "Goal";
+                    updateSelectedTile();
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_5 && GameStats.isEditor()){
+                    tileString = "Player Spawn";
                     updateSelectedTile();
                 }
 
@@ -191,7 +197,8 @@ public class Game extends JPanel implements ActionListener {
     public void initGame(){
 
         loadTiles(0);
-        //addEntity(new Player(Color.ORANGE, 0, 0, 15, 40, this, 0));
+        entities = new ArrayList<Entity>();
+        addEntity(new Player(Color.ORANGE, 0, 0, 15, 40, this, 0));
         timer = new Timer(1000/60, this);
         timer.start();
     }
@@ -209,9 +216,16 @@ public class Game extends JPanel implements ActionListener {
                 }
             }
         }
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Lucida Console", Font.BOLD, 24));
-        printSimpleString(tileString, getWidth(), -300, 20, g);
+        if(GameStats.isEditor()) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 24));
+            printSimpleString(tileString, getWidth(), -300, 20, g);
+        }
+        if(GameStats.isPlay()){
+            for (Entity obj : entities) {
+                obj.paint(g);
+            }
+        }
     }
 
     public int getNextIndex(){
@@ -268,10 +282,13 @@ public class Game extends JPanel implements ActionListener {
 
         int newX = x + offset;
 
-
-        tileMap[y / 20][(int)Math.floor(newX / 20.0)] = selected.cloneTile();
-        tileMap[y / 20][(int)Math.floor(newX / 20.0)].setPos(new TilePos(newX, y, false));
-
+if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
+    if(tileMap[y / 20][(int) Math.floor(newX / 20.0)] instanceof PlayerStartTile){
+        playerSpawnPlaced = false;
+    }
+    tileMap[y / 20][(int) Math.floor(newX / 20.0)] = selected.cloneTile();
+    tileMap[y / 20][(int) Math.floor(newX / 20.0)].setPos(new TilePos(newX, y, false));
+}
     }
 
     public void updateSelectedTile(){
@@ -290,6 +307,9 @@ public class Game extends JPanel implements ActionListener {
                 break;
             case "Goal":
                 selectedTile = new GoalTile(new Color(255,0,255), 0, 0, 20, 20, this, 0);
+                break;
+            case "Player Spawn":
+                selectedTile = new PlayerStartTile(Color.ORANGE, 0, 0, 20, 20, this, 0);
                 break;
             default:
                 selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);

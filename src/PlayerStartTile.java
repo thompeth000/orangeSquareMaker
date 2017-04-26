@@ -1,11 +1,11 @@
 import java.awt.*;
 
 /**
- * Created by thompeth000 on 4/20/2017.
+ * Created by thompeth000 on 4/26/2017.
  */
-public class GoalTile extends Entity implements Tile {
+public class PlayerStartTile extends Entity implements Tile {
 
-    public GoalTile(Color color, int x, int y, int width, int height, Game game, int index){
+    public PlayerStartTile(Color color, int x, int y, int width, int height, Game game, int index){
         super(color, x, y, width, height, game, index);
     }
 
@@ -54,7 +54,7 @@ public class GoalTile extends Entity implements Tile {
 
     @Override
     public Tile cloneTile() {
-        return new GoalTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
+        return new PlayerStartTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
     }
 
 
@@ -69,8 +69,9 @@ public class GoalTile extends Entity implements Tile {
 
     @Override
     public void paint(Graphics g) {
-        g.setColor(getColor());
-        g.fillOval(getX(), getY(), getWidth(), getHeight());
-
+       if(GameStats.isEditor()) {
+           g.setColor(getColor());
+           g.fillOval(getX(), getY(), getWidth(), getHeight());
+       }
     }
 }
