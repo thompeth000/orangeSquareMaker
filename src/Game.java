@@ -105,7 +105,11 @@ public class Game extends JPanel implements ActionListener {
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_P) {
-
+                    if(GameStats.isEditor()){
+                        GameStats.setPlay();
+                    }
+                    else
+                        GameStats.setEditor();
 
                 }
             }
@@ -285,6 +289,9 @@ public class Game extends JPanel implements ActionListener {
 if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     if(tileMap[y / 20][(int) Math.floor(newX / 20.0)] instanceof PlayerStartTile){
         playerSpawnPlaced = false;
+    }
+    if(selected instanceof PlayerStartTile){
+        playerSpawnPlaced = true;
     }
     tileMap[y / 20][(int) Math.floor(newX / 20.0)] = selected.cloneTile();
     tileMap[y / 20][(int) Math.floor(newX / 20.0)].setPos(new TilePos(newX, y, false));

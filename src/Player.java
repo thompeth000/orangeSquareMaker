@@ -11,11 +11,33 @@ public class Player extends Entity {
 
     public void checkCollisions(int i) {
 
+        //UNFINISHED
+for(int j = 0; j < getTileMap().length; j++){
+    for(int k = 0; k < getTileMap()[0].length; k++){
+        if(!(getTile(j,k) instanceof AirTile) && getBounds().intersects(getTile(j,k).getBounds())){
+            if(getDy() < 0 && getY() > getTile(j,k).getY() + 10 && getTile(j,k).getX() + 20 > getX()){
+                setY((int)(getY() - getDy()));
+                setDy(0);
+            }
+            else if(getDy() >= 0 && (getY() + getHeight()) <= getTile(j,k).getY() + 10){
+                setY((int)(getY() - getDy()));
+                setDy(0);
+                setAirborne(false);
+            }
+            else if(getDx() < 0 &&)
+        }
+    }
+}
     }
 
 
     public void update(int i) {
     updateTileMap();
+    if(isAirborne()){
+        setDy(getDy() + 2);
+    }
+    move();
+    checkCollisions(i);
 
     }
 

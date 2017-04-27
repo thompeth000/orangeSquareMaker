@@ -29,7 +29,7 @@ public abstract class Entity {
 
 
         if(!(this instanceof Tile))
-        collideableTiles = new Tile[(height * 5) / 20][width * 5 / 20];
+        collideableTiles = new Tile[(height * 3) / 20][(width * 3) / 20];
 
         this.index = index;
     }
@@ -49,6 +49,10 @@ public abstract class Entity {
 
     public void decrementIndex(){
         index--;
+    }
+
+    public void setAirborne(boolean a){
+        airborne = a;
     }
 
     public Rectangle getBounds(){
@@ -100,7 +104,7 @@ public abstract class Entity {
     public void updateTileMap(){
         for(int i = 0; i < collideableTiles.length; i++){
             for(int j = 0; j < collideableTiles[0].length; j++){
-                collideableTiles[i][j] = game.getTile(i,j + (x / 20)).cloneTile();
+                collideableTiles[i][j] = game.getTile((y - height) + (i * 20), (x - width) + (j * 20)).cloneTile();
             }
         }
     }
@@ -115,6 +119,10 @@ public abstract class Entity {
 
     public double getDx() {
         return dx;
+    }
+
+    public Tile getTile(int y, int x){
+        return collideableTiles[y][x];
     }
 
 

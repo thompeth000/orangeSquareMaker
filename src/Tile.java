@@ -14,6 +14,12 @@ public interface Tile {
 
     public TilePos getAbsPos();
 
+    public Rectangle getBounds();
+
+    public int getX();
+
+    public int getY();
+
     public void paint(Graphics g);
 
     public void offsetPos(int offset);
