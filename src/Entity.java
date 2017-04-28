@@ -55,6 +55,31 @@ public abstract class Entity {
         airborne = a;
     }
 
+    public double calcMovementVector(){
+        return Math.atan2(dy, dx);
+    }
+
+    public void doTileCollisions(){
+        double v = calcMovementVector();
+
+        for(int j = 0; j < collideableTiles.length; j++){
+            for(int k = 0; k < collideableTiles[0].length; k++){
+                if(!(getTile(j,k) instanceof AirTile) && getBounds().intersects(collideableTiles[j][k].getBounds())){
+                    if(dy < 0 && y > collideableTiles[j][k].getY() + 15){
+                        y = (int)(y - dy);
+                        dy = 0;
+                    }
+                    else if(dy >= 0 && (y + height) <= collideableTiles[j][k].getY() + 10){
+                        y = (int)(y - dy);
+                        dy = 0;
+                        airborne = false;
+                    }
+                    else if(dx < 0 && x)
+                }
+            }
+        }
+    }
+
     public Rectangle getBounds(){
         return new Rectangle(x,y,width,height);
     }
