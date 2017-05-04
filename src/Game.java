@@ -243,7 +243,7 @@ public class Game extends JPanel implements ActionListener {
                 loadedTiles[i][k].setPos(new TilePos(k, i, true));
                 loadedTiles[i][k].offsetPos(offset);
             }
-            System.out.println(offset);
+
         }
     }
 
@@ -253,7 +253,7 @@ public class Game extends JPanel implements ActionListener {
    if(GameStats.isEditor()) {
        if (aPressed) {
            cameraOffset -= 10;
-           System.out.println("A");
+
            if (cameraOffset < 0) {
                cameraOffset = 0;
            }
@@ -261,7 +261,7 @@ public class Game extends JPanel implements ActionListener {
 
        if (dPressed) {
            cameraOffset += 10;
-           System.out.println("D");
+
        }
 
        if (click) {
@@ -358,6 +358,14 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
 
             return new AirTile(Color.BLUE, col * 20, row * 20, 20, 20, this, 0);
 
+
+    }
+
+    public Tile getLoadedTile(int row, int col){
+        if(row < loadedTiles.length && row >= 0 && col < loadedTiles[0].length && col >= 0)
+            return loadedTiles[row][col];
+
+        return new AirTile(Color.BLUE, col * 20, row * 20, 20, 20, this, 0);
 
     }
 

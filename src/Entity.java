@@ -4,8 +4,9 @@ import java.awt.*;
  * Created by thompeth000 on 4/13/2017.
  */
 public abstract class Entity {
-    private int x, y, width, height, index;
+
     private boolean airborne;
+    private int x, y, width, height, index;
     private double dx, dy;
     private Game game;
     private Color color;
@@ -26,10 +27,13 @@ public abstract class Entity {
         this.y = y;
         this.width = width;
         this.height = height;
+        dx = 10;
 
 
-        if(!(this instanceof Tile))
-        collideableTiles = new Tile[(height * 3) / 20][(width * 3) / 20];
+        if(!(this instanceof Tile)) {
+            collideableTiles = new Tile[(height * 3) / 20][(width * 3) / 20];
+            airborne = true;
+        }
 
         this.index = index;
     }
@@ -60,28 +64,42 @@ public abstract class Entity {
     }
 
     public void doTileCollisions(){
-        double v = calcMovementVector();
+
+        int prevx = x - (int)dx;
+        int prevy = y - (int)dy;
+
 
         for(int j = 0; j < collideableTiles.length; j++){
             for(int k = 0; k < collideableTiles[0].length; k++){
                 if(!(getTile(j,k) instanceof AirTile) && getBounds().intersects(collideableTiles[j][k].getBounds())){
-                    if(dy < 0 && y > collideableTiles[j][k].getY() + 15){
-                        y = (int)(y - dy);
-                        dy = 0;
+                    if(prevy > collideableTiles[j][k].getY() + 20 ^ prevy + height <= collideableTiles[j][k].getY()){
+                        if (dy < 0) {
+                            y = collideableTiles[j][k].getY();
+                            x = (int) (x - dx);
+                            dy = 0;
+                            System.out.println("Collision 1");
+                        } else if (dy >= 0) {
+                            y = collideableTiles[j][k].getY() - height;
+                            x = (int) (x - dx);
+                            dy = 0;
+                            airborne = false;
+                            System.out.println("Collision 2");
+                        }
                     }
-                    else if(dy >= 0 && (y + height) <= collideableTiles[j][k].getY() + 10){
-                        y = (int)(y - dy);
-                        dy = 0;
-                        airborne = false;
+                    else{
+                        y = prevy;
+                        x = prevx;
+                        dx = 0;
+                        System.out.println("Collision 3");
                     }
-                    else if(dx < 0 && x)
+
                 }
             }
         }
     }
 
     public Rectangle getBounds(){
-        return new Rectangle(x,y,width,height);
+        return new Rectangle((int)x,(int)y,(int)width,(int)height);
     }
 
     public int getX() {
@@ -129,7 +147,7 @@ public abstract class Entity {
     public void updateTileMap(){
         for(int i = 0; i < collideableTiles.length; i++){
             for(int j = 0; j < collideableTiles[0].length; j++){
-                collideableTiles[i][j] = game.getTile((y - height) + (i * 20), (x - width) + (j * 20)).cloneTile();
+                collideableTiles[i][j] = game.getLoadedTile(((y - height) / 20) + i, ((x - width) / 20) + j).cloneTile();
             }
         }
     }
