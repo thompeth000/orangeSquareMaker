@@ -5,13 +5,21 @@ import java.awt.*;
  */
 public class CoinTile extends Entity implements Tile {
 
-    public CoinTile(Color color, int x, int y, int width, int height, Game game, int index){
+    boolean visible;
+
+    public CoinTile(Color color, int x, int y, int width, int height, Game game, int index, boolean vis){
         super(color, x, y, width, height, game, index);
+        visible = vis;
     }
 
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public boolean isVisible(){
+        return visible;
     }
 
     @Override
@@ -36,6 +44,23 @@ public class CoinTile extends Entity implements Tile {
         return null;
     }
 
+    @Override
+    public boolean isCollideable() {
+        return false;
+    }
+
+    @Override
+    public void setVisible(boolean a) {
+        visible = a;
+    }
+
+    @Override
+    public void interact(Entity ent, int side) {
+        if((ent instanceof Player) && visible){
+            GameStats.incrementScore(100);
+            visible = false;
+        }
+    }
 
 
     public void checkCollisions(int i) {
@@ -49,7 +74,7 @@ public class CoinTile extends Entity implements Tile {
 
     @Override
     public Tile cloneTile() {
-        return new CoinTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
+        return new CoinTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0, visible);
     }
 
 
@@ -64,13 +89,20 @@ public class CoinTile extends Entity implements Tile {
 
     @Override
     public void paint(Graphics g) {
-        g.setColor(getColor());
-        g.fillOval(getX(), getY(), getWidth(), getHeight());
+        if(visible) {
+            g.setColor(getColor());
+            g.fillOval(getX(), getY(), getWidth(), getHeight());
+        }
+
 
     }
 
     @Override
     public void offsetPos(int offset) {
         setX((getX()) - (offset % 20));
+    }
+
+    public void kill(int i){
+
     }
 }

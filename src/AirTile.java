@@ -16,6 +16,11 @@ public class AirTile extends Entity implements Tile {
     }
 
     @Override
+    public void setVisible(boolean a) {
+
+    }
+
+    @Override
     public void offsetPos(int offset) {
         setX((getX()) - (offset % 20));
     }
@@ -42,6 +47,15 @@ public class AirTile extends Entity implements Tile {
         return null;
     }
 
+    @Override
+    public boolean isCollideable() {
+        return false;
+    }
+
+    @Override
+    public void interact(Entity ent, int side) {
+
+    }
 
 
     public void checkCollisions(int i) {
@@ -70,6 +84,15 @@ public class AirTile extends Entity implements Tile {
 
     @Override
     public void paint(Graphics g) {
+
+    }
+
+    @Override
+    public boolean isVisible(){
+        return false;
+    }
+
+    public void kill(int i){
 
     }
 }

@@ -5,6 +5,8 @@ import java.awt.*;
  */
 public class LavaTile extends Entity implements Tile {
 
+    private boolean visible;
+
     public LavaTile(Color color, int x, int y, int width, int height, Game game, int index){
         super(color, x, y, width, height, game, index);
     }
@@ -12,6 +14,11 @@ public class LavaTile extends Entity implements Tile {
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public void setVisible(boolean a) {
+        visible = a;
     }
 
     @Override
@@ -41,6 +48,20 @@ public class LavaTile extends Entity implements Tile {
         return null;
     }
 
+    @Override
+    public boolean isCollideable() {
+        return true;
+    }
+
+    @Override
+    public boolean isVisible(){
+        return visible;
+    }
+
+    @Override
+    public void interact(Entity ent, int side) {
+        ent.kill(getGame().getControlVar());
+    }
 
 
     public void checkCollisions(int i) {
@@ -71,5 +92,9 @@ public class LavaTile extends Entity implements Tile {
     public void paint(Graphics g) {
         g.setColor(getColor());
         g.fillRect(getX(), getY(), getWidth(), getHeight());
+    }
+
+    public void kill(int i){
+
     }
 }

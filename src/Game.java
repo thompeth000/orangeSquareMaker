@@ -15,8 +15,8 @@ public class Game extends JPanel implements ActionListener {
     Tile[][] tileMap;
     Tile[][] loadedTiles;
     Tile selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
-    int cursorX, cursorY, cameraOffset, gameLoopControl;
-    boolean click, dPressed, aPressed, playerSpawnPlaced;
+    int cursorX, cursorY, cameraOffset, gameLoopControl, gameTime, levelLength;
+    boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed;
     String tileString = "Ground Tile";
 
     public Game(){
@@ -29,6 +29,7 @@ public class Game extends JPanel implements ActionListener {
         tileMap = new Tile[30][2048];
         loadedTiles = new Tile[30][40];
         cameraOffset = 0;
+        gameTime = 0;
         playerSpawnPlaced = false;
 
         for(int i = 0; i < tileMap.length; i++){
@@ -56,8 +57,8 @@ public class Game extends JPanel implements ActionListener {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-
+                if (e.getKeyCode() == KeyEvent.VK_W) {
+                wPressed = true;
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_D) {
@@ -106,18 +107,22 @@ public class Game extends JPanel implements ActionListener {
 
                 if (e.getKeyCode() == KeyEvent.VK_P) {
                     if(GameStats.isEditor()){
+                        levelLength = findLevelLength();
                         GameStats.setPlay();
                     }
-                    else
-                        GameStats.setEditor();
+                    else {
+                        for(int i = 0; i < tileMap.length; i++){
 
+                        }
+                        GameStats.setEditor();
+                    }
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_SPACE){
-
+                if(e.getKeyCode() == KeyEvent.VK_W){
+                 wPressed = false;
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_D){
@@ -198,6 +203,26 @@ public class Game extends JPanel implements ActionListener {
 
     }
 
+    public int getControlVar(){
+        return gameLoopControl;
+    }
+
+    public boolean isdPressed() {
+        return dPressed;
+    }
+
+    public boolean isaPressed() {
+        return aPressed;
+    }
+
+    public boolean iswPressed() {
+        return wPressed;
+    }
+
+    public int getCameraOffset(){
+        return cameraOffset;
+    }
+
     public void initGame(){
 
         loadTiles(0);
@@ -210,6 +235,8 @@ public class Game extends JPanel implements ActionListener {
     public Tile[][] getTileMap(){
         return tileMap;
     }
+
+
 
     public void paint(Graphics g){
         super.paint(g);
@@ -229,6 +256,11 @@ public class Game extends JPanel implements ActionListener {
             for (Entity obj : entities) {
                 obj.paint(g);
             }
+
+
+
+
+
         }
     }
 
@@ -250,6 +282,10 @@ public class Game extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e){
+        gameTime++;
+        if(gameTime == 2147483647){
+            gameTime = 0;
+        }
    if(GameStats.isEditor()) {
        if (aPressed) {
            cameraOffset -= 10;
@@ -310,7 +346,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
                 selectedTile = new LavaTile(Color.RED, 0, 0, 20, 20, this, 0);
                 break;
             case "Coin":
-                selectedTile = new CoinTile(Color.YELLOW, 0, 0, 20, 20, this, 0);
+                selectedTile = new CoinTile(Color.YELLOW, 0, 0, 20, 20, this, 0, true);
                 break;
             case "Goal":
                 selectedTile = new GoalTile(new Color(255,0,255), 0, 0, 20, 20, this, 0);
@@ -371,6 +407,29 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
 
     public void decrementControlVariable(){
         gameLoopControl--;
+    }
+
+    public void setTile(TilePos pos, Tile newTile){
+        tileMap[pos.getRow()][pos.getCol()] = newTile.cloneTile();
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    }
+
+    public int findLevelLength(){
+
+
+        for(int i = tileMap.length - 1; i >= 0; i--){
+            for(int j = tileMap[0].length - 1; j >= 0; j--){
+                if(!(tileMap[i][j] instanceof AirTile)){
+                    System.out.println(i * 20);
+                    return i * 20;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public int getLevelLength(){
+        return levelLength;
     }
 
 

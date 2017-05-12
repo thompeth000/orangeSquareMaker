@@ -4,9 +4,14 @@
 public class GameStats {
     public static boolean editor = true;
     public static boolean play, pause;
+    public static int score;
 
     public static boolean isEditor(){
         return editor;
+    }
+
+    public static void incrementScore(int num){
+        score += num;
     }
 
     public static boolean isPlay(){

@@ -31,7 +31,7 @@ public abstract class Entity {
 
 
         if(!(this instanceof Tile)) {
-            collideableTiles = new Tile[(height * 3) / 20][(width * 3) / 20];
+            collideableTiles = new Tile[(height * 6) / 20][(width * 6) / 20];
             airborne = true;
         }
 
@@ -42,12 +42,14 @@ public abstract class Entity {
 
     public abstract void update(int i);
 
-    public void kill(int i){
+    public void remove(int i){
         if(index <= i){
             game.decrementControlVariable();
         }
         game.removeEntity(index);
     }
+
+    public abstract void kill(int i);
 
     public abstract boolean checkWallCollision();
 
@@ -67,39 +69,65 @@ public abstract class Entity {
 
         int prevx = x - (int)dx;
         int prevy = y - (int)dy;
+        boolean tileFound = false;
+        Rectangle next = new Rectangle(x + (int)dx,y + (int)dy, width, height);
+
+        airborne = true;
+
 
 
         for(int j = 0; j < collideableTiles.length; j++){
             for(int k = 0; k < collideableTiles[0].length; k++){
-                if(!(getTile(j,k) instanceof AirTile) && getBounds().intersects(collideableTiles[j][k].getBounds())){
-                    if(prevy > collideableTiles[j][k].getY() + 20 ^ prevy + height <= collideableTiles[j][k].getY()){
-                        if (dy < 0) {
-                            y = collideableTiles[j][k].getY();
-                            x = (int) (x - dx);
+                if(!(getTile(j,k) instanceof AirTile) && next.intersects(collideableTiles[j][k].getBounds())){
+
+                    if(x >= collideableTiles[j][k].getX() + 20){
+                        if(collideableTiles[j][k].isCollideable()) {
+                            x = collideableTiles[j][k].getX() + 20;
+                            System.out.println("Collision 3");
+                            dx = 0;
+                        }
+                        collideableTiles[j][k].interact(this, 3);
+                    } else if(x + width < collideableTiles[j][k].getX() + 1) {
+                        if(collideableTiles[j][k].isCollideable()) {
+                            x = collideableTiles[j][k].getX() - width;
+                            dx = 0;
+                            System.out.println("Collision 4");
+                        }
+                        collideableTiles[j][k].interact(this, 4);
+                    }else if (y >= collideableTiles[j][k].getY() + 20) {
+                        if(collideableTiles[j][k].isCollideable()) {
+                            y = collideableTiles[j][k].getY() + 20;
                             dy = 0;
                             System.out.println("Collision 1");
-                        } else if (dy >= 0) {
+                        }
+                        collideableTiles[j][k].interact(this, 1);
+                        }else if (y + height < collideableTiles[j][k].getY() + 1) {
+                        if(collideableTiles[j][k].isCollideable()) {
                             y = collideableTiles[j][k].getY() - height;
-                            x = (int) (x - dx);
                             dy = 0;
                             airborne = false;
                             System.out.println("Collision 2");
                         }
+                        collideableTiles[j][k].interact(this, 2);
+                        }
+
+
+
+                            tileFound = true;
+
                     }
-                    else{
-                        y = prevy;
-                        x = prevx;
-                        dx = 0;
-                        System.out.println("Collision 3");
-                    }
+
 
                 }
+
+
             }
         }
-    }
+
+
 
     public Rectangle getBounds(){
-        return new Rectangle((int)x,(int)y,(int)width,(int)height);
+        return new Rectangle(x,y,width,height);
     }
 
     public int getX() {
@@ -128,6 +156,14 @@ public abstract class Entity {
         return width;
     }
 
+    public void updateX(double dx){
+        x += dx;
+    }
+
+    public void updateY(double dy){
+        y += dy;
+    }
+
     public void setWidth(int width) {
         this.width = width;
     }
@@ -147,7 +183,9 @@ public abstract class Entity {
     public void updateTileMap(){
         for(int i = 0; i < collideableTiles.length; i++){
             for(int j = 0; j < collideableTiles[0].length; j++){
-                collideableTiles[i][j] = game.getLoadedTile(((y - height) / 20) + i, ((x - width) / 20) + j).cloneTile();
+                collideableTiles[i][j] = game.getTile(((y - height) / 20) + i, (((x - width) / 20) + j) + (getGame().getCameraOffset() / 20));
+                collideableTiles[i][j].setPos(new TilePos(j + ((x - width) / 20),i + ((y - height) / 20), true));
+                collideableTiles[i][j].offsetPos(getGame().getCameraOffset());
             }
         }
     }

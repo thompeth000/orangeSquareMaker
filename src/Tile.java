@@ -20,6 +20,14 @@ public interface Tile {
 
     public int getY();
 
+    public boolean isCollideable();
+
+    public void setVisible(boolean a);
+
+    public boolean isVisible();
+
+    public void interact(Entity ent, int side);
+
     public void paint(Graphics g);
 
     public void offsetPos(int offset);

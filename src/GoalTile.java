@@ -5,6 +5,8 @@ import java.awt.*;
  */
 public class GoalTile extends Entity implements Tile {
 
+    private boolean visible;
+
     public GoalTile(Color color, int x, int y, int width, int height, Game game, int index){
         super(color, x, y, width, height, game, index);
     }
@@ -17,6 +19,11 @@ public class GoalTile extends Entity implements Tile {
     @Override
     public void setPos(int row, int col) {
 
+    }
+
+    @Override
+    public void setVisible(boolean a) {
+        visible = a;
     }
 
     @Override
@@ -41,6 +48,15 @@ public class GoalTile extends Entity implements Tile {
         return null;
     }
 
+    @Override
+    public boolean isCollideable() {
+        return false;
+    }
+
+    @Override
+    public void interact(Entity ent, int side) {
+//TO BE IMPLEMENTED
+    }
 
 
     public void checkCollisions(int i) {
@@ -50,6 +66,11 @@ public class GoalTile extends Entity implements Tile {
 
     public void update(int i) {
 
+    }
+
+    @Override
+    public boolean isVisible(){
+        return visible;
     }
 
     @Override
@@ -71,6 +92,10 @@ public class GoalTile extends Entity implements Tile {
     public void paint(Graphics g) {
         g.setColor(getColor());
         g.fillOval(getX(), getY(), getWidth(), getHeight());
+
+    }
+
+    public void kill(int i){
 
     }
 }
