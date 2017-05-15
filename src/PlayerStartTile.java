@@ -69,6 +69,11 @@ public class PlayerStartTile extends Entity implements Tile {
     }
 
     @Override
+    public void setCollideable(boolean a){
+
+    }
+
+    @Override
     public boolean isVisible(){
         return visible;
     }

@@ -15,7 +15,8 @@ public class Game extends JPanel implements ActionListener {
     Tile[][] tileMap;
     Tile[][] loadedTiles;
     Tile selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
-    int cursorX, cursorY, cameraOffset, gameLoopControl, gameTime, levelLength;
+    int cursorX, cursorY, cameraOffset, gameLoopControl, levelLength, playerSpawnX, playerSpawnY, playerSpawnOffset;
+    long gameTime;
     boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed;
     String tileString = "Ground Tile";
 
@@ -109,6 +110,11 @@ public class Game extends JPanel implements ActionListener {
                     if(GameStats.isEditor()){
                         levelLength = findLevelLength();
                         GameStats.setPlay();
+                        if(playerSpawnPlaced) {
+                            entities.get(0).setX(playerSpawnX);
+                            entities.get(0).setY(playerSpawnY);
+                            cameraOffset = playerSpawnOffset;
+                        }
                     }
                     else {
                         for(int i = 0; i < tileMap.length; i++){
@@ -283,9 +289,7 @@ public class Game extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         gameTime++;
-        if(gameTime == 2147483647){
-            gameTime = 0;
-        }
+
    if(GameStats.isEditor()) {
        if (aPressed) {
            cameraOffset -= 10;
@@ -328,6 +332,9 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     }
     if(selected instanceof PlayerStartTile){
         playerSpawnPlaced = true;
+        playerSpawnX = x;
+        playerSpawnY = y - entities.get(0).getHeight();
+        playerSpawnOffset = offset;
     }
     tileMap[y / 20][(int) Math.floor(newX / 20.0)] = selected.cloneTile();
     tileMap[y / 20][(int) Math.floor(newX / 20.0)].setPos(new TilePos(newX, y, false));
@@ -421,7 +428,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
             for(int j = tileMap[0].length - 1; j >= 0; j--){
                 if(!(tileMap[i][j] instanceof AirTile)){
                     System.out.println(i * 20);
-                    return i * 20;
+                    return (i + 1) * 20;
                 }
             }
         }

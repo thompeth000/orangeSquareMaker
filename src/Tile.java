@@ -26,6 +26,8 @@ public interface Tile {
 
     public boolean isVisible();
 
+    public void setCollideable(boolean a);
+
     public void interact(Entity ent, int side);
 
     public void paint(Graphics g);

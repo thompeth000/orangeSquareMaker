@@ -27,6 +27,11 @@ public class GoalTile extends Entity implements Tile {
     }
 
     @Override
+    public void setCollideable(boolean a){
+
+    }
+
+    @Override
     public void setPos(TilePos position) {
         setX(position.getCol() * 20);
         setY(position.getRow() * 20);

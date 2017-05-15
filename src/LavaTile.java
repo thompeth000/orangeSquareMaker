@@ -22,6 +22,12 @@ public class LavaTile extends Entity implements Tile {
     }
 
     @Override
+    public void setCollideable(boolean a){
+
+    }
+
+
+    @Override
     public void setPos(int row, int col) {
 
     }

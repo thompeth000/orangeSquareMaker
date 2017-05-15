@@ -5,7 +5,7 @@ import java.awt.*;
  */
 public class CoinTile extends Entity implements Tile {
 
-    boolean visible;
+    private boolean visible, collideable;
 
     public CoinTile(Color color, int x, int y, int width, int height, Game game, int index, boolean vis){
         super(color, x, y, width, height, game, index);
@@ -20,6 +20,11 @@ public class CoinTile extends Entity implements Tile {
     @Override
     public boolean isVisible(){
         return visible;
+    }
+
+    @Override
+    public void setCollideable(boolean a){
+
     }
 
     @Override
