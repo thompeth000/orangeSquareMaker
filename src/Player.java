@@ -37,7 +37,7 @@ if(!dead) {
     }
 }
 
-        if (isAirborne() && getDy() < 30){
+        if ((isAirborne() || dead) && getDy() < 30){
             setDy(getDy() + 1);
     }
 
@@ -94,6 +94,6 @@ if(!dead) {
     public void kill(int i){
     dead = true;
     setDx(0);
-    setDy(-20);
+    setDy(-10);
     }
 }

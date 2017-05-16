@@ -6,6 +6,7 @@ public class GameStats {
     public static boolean play, pause, death, gameOver;
     public static int score;
     public static int lives = 3;
+    public static long deathStartTime;
 
     public static boolean isEditor(){
         return editor;
@@ -17,6 +18,14 @@ public class GameStats {
 
     public static int getScore(){
         return score;
+    }
+
+    public static boolean isGameOver(){
+        return gameOver;
+    }
+
+    public static long getDeathStartTime(){
+        return deathStartTime;
     }
 
     public static void resetScore(){
@@ -83,6 +92,9 @@ public class GameStats {
             editor = false;
             death = false;
             gameOver = true;
+            lives = 3;
+            score = 0;
         }
+        deathStartTime = Game.getTime();
     }
 }

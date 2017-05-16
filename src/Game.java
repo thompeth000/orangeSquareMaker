@@ -9,14 +9,14 @@ import javax.swing.event.MouseInputAdapter;
  */
 public class Game extends JPanel implements ActionListener {
 
-    Color backColor = new Color(40,150,220);
+    private final Color BACKCOLOR = new Color(40,150,220);
     Timer timer;
     ArrayList<Entity> entities;
     Tile[][] tileMap;
     Tile[][] loadedTiles;
     Tile selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
     int cursorX, cursorY, cameraOffset, gameLoopControl, levelLength, playerSpawnX, playerSpawnY, playerSpawnOffset;
-    long gameTime;
+    static long gameTime;
     boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed;
     String tileString = "Ground Tile";
 
@@ -26,7 +26,7 @@ public class Game extends JPanel implements ActionListener {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle("FINAL PROJECT");
         setPreferredSize(new Dimension(800,600));
-        setBackground(backColor);
+        setBackground(BACKCOLOR);
         tileMap = new Tile[30][2048];
         loadedTiles = new Tile[30][40];
         cameraOffset = 0;
@@ -237,14 +237,31 @@ public class Game extends JPanel implements ActionListener {
         timer.start();
     }
 
+    public void startGame(){
+        levelLength = findLevelLength();
+        GameStats.setPlay();
+        if(playerSpawnPlaced) {
+            entities.get(0).setX(playerSpawnX);
+            entities.get(0).setY(playerSpawnY);
+            cameraOffset = playerSpawnOffset;
+        }
+    }
+
+
     public Tile[][] getTileMap(){
         return tileMap;
+    }
+
+    public static long getTime(){
+        return gameTime;
     }
 
 
 
     public void paint(Graphics g){
         super.paint(g);
+        setBackground(BACKCOLOR);
+
         if(GameStats.isEditor() || GameStats.isPlay()) {
             for (int i = 0; i < loadedTiles.length; i++) {
                 for (int k = 0; k < loadedTiles[0].length; k++) {
@@ -261,12 +278,28 @@ public class Game extends JPanel implements ActionListener {
             for (Entity obj : entities) {
                 obj.paint(g);
             }
-
-
-
-
-
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 24));
+            printSimpleString("Score: " + GameStats.getScore(), getWidth(), -300, 20, g);
+            printSimpleString("Lives: " + GameStats.getLives(), getWidth(), -300, 50, g);
         }
+        if(GameStats.isDeath()){
+            setBackground(Color.BLACK);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 24));
+            printSimpleString("Score: " + GameStats.getScore(), getWidth(), -300, 20, g);
+            printSimpleString("X " + GameStats.getLives(), getWidth(), 20, 300, g);
+            g.setColor(Color.ORANGE);
+            g.fillRect(370, 260, 15, 40);
+        }
+        if(GameStats.isGameOver()){
+            setBackground(Color.BLACK);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 24));
+            printSimpleString("Score: " + GameStats.getScore(), getWidth(), -300, 20, g);
+            printSimpleString("GAME OVER", getWidth(), 0, 300, g);
+        }
+
     }
 
     public int getNextIndex(){
@@ -312,6 +345,12 @@ public class Game extends JPanel implements ActionListener {
    if(GameStats.isPlay()){
        for(gameLoopControl = 0; gameLoopControl < getNextIndex(); gameLoopControl++){
            entities.get(gameLoopControl).update(gameLoopControl);
+       }
+   }
+
+   if(GameStats.isDeath()|| GameStats.isGameOver()){
+       if(gameTime - GameStats.getDeathStartTime() > 120){
+           startGame();
        }
    }
 

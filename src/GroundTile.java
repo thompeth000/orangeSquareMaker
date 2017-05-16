@@ -7,6 +7,7 @@ public class GroundTile extends Entity implements Tile {
 
     private boolean visible;
 
+
     public GroundTile(Color color, int x, int y, int width, int height, Game game, int index){
         super(color, x, y, width, height, game, index);
     }
@@ -96,7 +97,7 @@ public class GroundTile extends Entity implements Tile {
     @Override
     public void paint(Graphics g) {
         g.setColor(getColor());
-        g.fillRect(getX(), getY(), getWidth(), getHeight());
+        g.drawImage(groundTile, getX(), getY(), getWidth(), getHeight());
     }
 
     public void kill(int i){
