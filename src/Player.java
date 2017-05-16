@@ -37,7 +37,7 @@ if(!dead) {
     }
 }
 
-        if (isAirborne()){
+        if (isAirborne() && getDy() < 30){
             setDy(getDy() + 1);
     }
 
@@ -73,13 +73,13 @@ if(!dead) {
         int absX = getX() + getGame().getCameraOffset();
         updateY(getDy());
 
-        if(absX < 400 || absX > getGame().getLevelLength() + 400){
+        if(absX < 400 || absX > 99999999){
             System.out.println(absX);
             updateX(getDx());
         }
         else {
             System.out.println("Scrolling");
-            getGame().setOffset(getGame().getCameraOffset() + (int) Math.round(getDx()));
+            getGame().scroll((int) Math.round(getDx()));
         }
 
     }

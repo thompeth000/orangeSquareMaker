@@ -24,7 +24,7 @@ public class Game extends JPanel implements ActionListener {
         JFrame frame = new JFrame();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setTitle("SUPER ORANGE SQUARE MAKER");
+        frame.setTitle("FINAL PROJECT");
         setPreferredSize(new Dimension(800,600));
         setBackground(backColor);
         tileMap = new Tile[30][2048];
@@ -34,17 +34,16 @@ public class Game extends JPanel implements ActionListener {
         playerSpawnPlaced = false;
 
         for(int i = 0; i < tileMap.length; i++){
-            for(int j = 0; j < tileMap[0].length; j++){
+            for(int j = 0; j < tileMap[i].length; j++){
                 tileMap[i][j] = new AirTile(Color.BLUE, j * 20, i * 20, 20, 20, this, 0);
             }
         }
 
-        for(int i = 0; i < tileMap.length; i++){
-            for(int j = 0; j < 20; j++){
-                tileMap[i][j] = new AirTile(Color.GREEN, j * 20, i * 20, 20, 20, this, 0);
+        for(int i = 0; i < loadedTiles.length; i++){
+            for(int j = 0; j < loadedTiles[i].length; j++){
+                loadedTiles[i][j] = new AirTile(Color.BLUE, j * 20, i * 20, 20, 20, this, 0);
             }
         }
-
 
 
         frame.add(this);
@@ -331,10 +330,12 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
         playerSpawnPlaced = false;
     }
     if(selected instanceof PlayerStartTile){
+
         playerSpawnPlaced = true;
-        playerSpawnX = x;
+        playerSpawnOffset = offset / 800 * 800;
+        playerSpawnX = playerSpawnOffset + (newX % 800);
         playerSpawnY = y - entities.get(0).getHeight();
-        playerSpawnOffset = offset;
+
     }
     tileMap[y / 20][(int) Math.floor(newX / 20.0)] = selected.cloneTile();
     tileMap[y / 20][(int) Math.floor(newX / 20.0)].setPos(new TilePos(newX, y, false));
@@ -437,6 +438,17 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
 
     public int getLevelLength(){
         return levelLength;
+    }
+
+    public void scroll(int a){
+        cameraOffset += a;
+        for(int i = 1; i < entities.size(); i++){
+            entities.get(i).setX(entities.get(i).getX() + a);
+        }
+    }
+
+    public void scrollTo(int a){
+        scroll(a - cameraOffset);
     }
 
 

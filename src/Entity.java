@@ -67,8 +67,7 @@ public abstract class Entity {
 
     public void doTileCollisions(){
 
-        int prevx = x - (int)dx;
-        int prevy = y - (int)dy;
+        int numTiles = 0;
         boolean tileFound = false;
         Rectangle next = new Rectangle(x + (int)dx,y + (int)dy, width, height);
 
@@ -78,6 +77,7 @@ public abstract class Entity {
 
         for(int j = 0; j < collideableTiles.length; j++){
             for(int k = 0; k < collideableTiles[0].length; k++){
+                numTiles++;
                 if(!(getTile(j,k) instanceof AirTile) && next.intersects(collideableTiles[j][k].getBounds())){
 
                     if(x >= collideableTiles[j][k].getX() + 20){
@@ -122,6 +122,7 @@ public abstract class Entity {
 
 
             }
+            System.out.println("Collideable Tiles: " + numTiles);
         }
 
 
