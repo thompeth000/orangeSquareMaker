@@ -7,9 +7,22 @@ public class GameStats {
     public static int score;
     public static int lives = 3;
     public static long deathStartTime;
+    public static int coinCounter = 0;
 
     public static boolean isEditor(){
         return editor;
+    }
+
+    public static void incrementCoinCounter(){
+        coinCounter++;
+        if(coinCounter >= 100){
+            lives++;
+            coinCounter = 0;
+        }
+    }
+
+    public static int getCoinCounter(){
+        return coinCounter;
     }
 
     public static void incrementScore(int num){

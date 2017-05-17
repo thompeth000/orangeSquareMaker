@@ -63,6 +63,7 @@ public class CoinTile extends Entity implements Tile {
     public void interact(Entity ent, int side) {
         if((ent instanceof Player) && visible){
             GameStats.incrementScore(100);
+            GameStats.incrementCoinCounter();
             visible = false;
         }
     }
@@ -96,7 +97,7 @@ public class CoinTile extends Entity implements Tile {
     public void paint(Graphics g) {
         if(visible) {
             g.setColor(getColor());
-            g.fillOval(getX(), getY(), getWidth(), getHeight());
+            g.drawImage(getGame().getSprite(1), getX(), getY(), getWidth(), getHeight(), null);
         }
 
 

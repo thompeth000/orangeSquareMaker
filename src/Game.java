@@ -3,6 +3,9 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
+import java.io.*;
+import javax.imageio.*;
+import java.awt.image.*;
 
 /**
  * Created by thompeth000 on 4/13/2017.
@@ -12,8 +15,10 @@ public class Game extends JPanel implements ActionListener {
     private final Color BACKCOLOR = new Color(40,150,220);
     Timer timer;
     ArrayList<Entity> entities;
+    BufferedImage groundSprite;
     Tile[][] tileMap;
     Tile[][] loadedTiles;
+    BufferedImage[] spriteSheet;
     Tile selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
     int cursorX, cursorY, cameraOffset, gameLoopControl, levelLength, playerSpawnX, playerSpawnY, playerSpawnOffset;
     static long gameTime;
@@ -29,6 +34,7 @@ public class Game extends JPanel implements ActionListener {
         setBackground(BACKCOLOR);
         tileMap = new Tile[30][2048];
         loadedTiles = new Tile[30][40];
+        spriteSheet = new BufferedImage[127];
         cameraOffset = 0;
         gameTime = 0;
         playerSpawnPlaced = false;
@@ -228,7 +234,25 @@ public class Game extends JPanel implements ActionListener {
         return cameraOffset;
     }
 
+    public BufferedImage getSprite(int spriteID){
+        return spriteSheet[spriteID];
+    }
+
     public void initGame(){
+
+        try {
+            spriteSheet[0] = ImageIO.read(new File("src/groundTile.png"));
+        }
+        catch(java.io.IOException e){
+            System.out.println("Image not found!");
+        }
+
+        try {
+            spriteSheet[1] = ImageIO.read(new File("src/coin.png"));
+        }
+        catch(java.io.IOException e){
+            System.out.println("Image not found!");
+        }
 
         loadTiles(0);
         entities = new ArrayList<Entity>();
@@ -278,10 +302,13 @@ public class Game extends JPanel implements ActionListener {
             for (Entity obj : entities) {
                 obj.paint(g);
             }
+            g.setColor(Color.YELLOW);
+            g.fillOval(40,60, 20,20);
             g.setColor(Color.WHITE);
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
             printSimpleString("Score: " + GameStats.getScore(), getWidth(), -300, 20, g);
             printSimpleString("Lives: " + GameStats.getLives(), getWidth(), -300, 50, g);
+            printSimpleString("X " + GameStats.getCoinCounter(), getWidth(), -300, 80, g);
         }
         if(GameStats.isDeath()){
             setBackground(Color.BLACK);

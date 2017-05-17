@@ -1,15 +1,21 @@
 import java.awt.*;
+import javax.imageio.*;
+import java.awt.image.*;
+import java.io.*;
 
 /**
  * Created by thompeth000 on 4/14/2017.
  */
 public class GroundTile extends Entity implements Tile {
 
+
     private boolean visible;
+
 
 
     public GroundTile(Color color, int x, int y, int width, int height, Game game, int index){
         super(color, x, y, width, height, game, index);
+
     }
 
     @Override
@@ -97,7 +103,7 @@ public class GroundTile extends Entity implements Tile {
     @Override
     public void paint(Graphics g) {
         g.setColor(getColor());
-        g.drawImage(groundTile, getX(), getY(), getWidth(), getHeight());
+        g.drawImage(getGame().getSprite(0), getX(), getY(), getWidth(), getHeight(), null);
     }
 
     public void kill(int i){
