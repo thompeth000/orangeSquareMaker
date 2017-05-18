@@ -25,6 +25,10 @@ public class GameStats {
         return coinCounter;
     }
 
+    public static void resetCoins(){
+        coinCounter = 0;
+    }
+
     public static void incrementScore(int num){
         score += num;
     }

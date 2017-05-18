@@ -58,6 +58,16 @@ public class PlayerStartTile extends Entity implements Tile {
 
     }
 
+    @Override
+    public boolean getUsed(){
+        return false;
+    }
+
+    @Override
+    public void reset(){
+
+    }
+
 
     public void update(int i) {
 

@@ -16,6 +16,10 @@ public interface Tile {
 
     public Rectangle getBounds();
 
+    public boolean getUsed();
+
+    public void reset();
+
     public int getX();
 
     public int getY();

@@ -22,6 +22,16 @@ public class GoalTile extends Entity implements Tile {
     }
 
     @Override
+    public boolean getUsed(){
+        return false;
+    }
+
+    @Override
+    public void reset(){
+
+    }
+
+    @Override
     public void setVisible(boolean a) {
         visible = a;
     }

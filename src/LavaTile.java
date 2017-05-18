@@ -55,6 +55,16 @@ public class LavaTile extends Entity implements Tile {
     }
 
     @Override
+    public boolean getUsed(){
+        return false;
+    }
+
+    @Override
+    public void reset(){
+
+    }
+
+    @Override
     public boolean isCollideable() {
         return true;
     }

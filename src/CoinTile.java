@@ -5,7 +5,7 @@ import java.awt.*;
  */
 public class CoinTile extends Entity implements Tile {
 
-    private boolean visible, collideable;
+    private boolean visible, collideable, used;
 
     public CoinTile(Color color, int x, int y, int width, int height, Game game, int index, boolean vis){
         super(color, x, y, width, height, game, index);
@@ -14,6 +14,18 @@ public class CoinTile extends Entity implements Tile {
 
     @Override
     public void destroy() {
+
+    }
+
+    @Override
+    public boolean getUsed(){
+        return used;
+    }
+
+    @Override
+    public void reset(){
+        used = false;
+        visible = true;
 
     }
 
@@ -65,6 +77,7 @@ public class CoinTile extends Entity implements Tile {
             GameStats.incrementScore(100);
             GameStats.incrementCoinCounter();
             visible = false;
+            used = true;
         }
     }
 

@@ -18,6 +18,10 @@ public class Player extends Entity {
         doTileCollisions();
     }
 
+    public void setDead(boolean b){
+        dead = false;
+    }
+
 
     public void update(int i) {
         updateTileMap();

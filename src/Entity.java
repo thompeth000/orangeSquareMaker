@@ -14,7 +14,7 @@ public abstract class Entity {
     private Color color;
     private Tile[][] collideableTiles;
     private final int ARRAYHEIGHT = 4;
-    private final int ARRAYWIDTH = 3;
+    private final int ARRAYWIDTH = 4;
 
 
 
@@ -192,8 +192,8 @@ public abstract class Entity {
     public void updateTileMap(){
         for(int i = 0; i < collideableTiles.length; i++){
             for(int j = 0; j < collideableTiles[0].length; j++){
-                collideableTiles[i][j] = game.getTile(((y - 10) / 20) + i, ((x - 10) / 20) + j + (getGame().getCameraOffset() / 20));
-                collideableTiles[i][j].setPos(new TilePos(((x - 10) / 20) + j,((y - 10) / 20) + i, true));
+                collideableTiles[i][j] = game.getTile(((y - 10) / 20) + i, ((x - 20) / 20) + j + (getGame().getCameraOffset() / 20));
+                collideableTiles[i][j].setPos(new TilePos(((x - 20) / 20) + j,((y - 10) / 20) + i, true));
                 collideableTiles[i][j].offsetPos(getGame().getCameraOffset());
             }
         }

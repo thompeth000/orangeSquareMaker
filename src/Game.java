@@ -108,18 +108,13 @@ public class Game extends JPanel implements ActionListener {
 
                 if (e.getKeyCode() == KeyEvent.VK_P) {
                     if(GameStats.isEditor()){
-                        levelLength = findLevelLength();
-                        GameStats.setPlay();
-                        if(playerSpawnPlaced) {
-                            entities.get(0).setX(playerSpawnX);
-                            entities.get(0).setY(playerSpawnY);
-                            cameraOffset = playerSpawnOffset;
-                        }
+                        startGame();
                     }
                     else {
-                        for(int i = 0; i < tileMap.length; i++){
-
-                        }
+                        GameStats.resetScore();
+                        GameStats.resetLives();
+                        GameStats.resetCoins();
+                        resetTiles();
                         GameStats.setEditor();
                     }
                 }
@@ -257,12 +252,22 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void startGame(){
+
+        resetTiles();
         levelLength = findLevelLength();
         GameStats.setPlay();
         if(playerSpawnPlaced) {
             entities.get(0).setX(playerSpawnX);
             entities.get(0).setY(playerSpawnY);
             cameraOffset = playerSpawnOffset;
+        }
+    }
+
+    public void resetTiles(){
+        for(int i = 0; i < tileMap.length; i++){
+            for(int k = 0; k < tileMap[i].length; k++){
+                tileMap[i][k].reset();
+            }
         }
     }
 
@@ -305,15 +310,16 @@ public class Game extends JPanel implements ActionListener {
             printSimpleString("Lives: " + GameStats.getLives(), getWidth(), -300, 50, g);
             printSimpleString("X " + GameStats.getCoinCounter(), getWidth(), -300, 80, g);
 
-            //FOR TILE COLLISION DEBUGGING
-            /*
+
+/*
             for (int i = 0; i < entities.get(0).getTileMap().length; i++) {
                 for (int k = 0; k < entities.get(0).getTileMap()[i].length; k++) {
                     entities.get(0).getTile(i,k).paint(g);
                 }
             }
             */
-            //FOR TILE COLLISION DEBUGGING
+
+
         }
         if(GameStats.isDeath()){
             setBackground(Color.BLACK);
@@ -383,6 +389,10 @@ public class Game extends JPanel implements ActionListener {
    if(GameStats.isDeath()|| GameStats.isGameOver()){
        if(gameTime - GameStats.getDeathStartTime() > 120){
            startGame();
+
+           if(entities.get(0) instanceof Player) {
+               ((Player) entities.get(0)).setDead(false);
+           }
        }
    }
 

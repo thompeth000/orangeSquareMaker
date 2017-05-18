@@ -90,6 +90,16 @@ public class GroundTile extends Entity implements Tile {
         return new GroundTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
     }
 
+    @Override
+    public boolean getUsed(){
+        return false;
+    }
+
+    @Override
+    public void reset(){
+
+    }
+
 
     public boolean checkWallCollision() {
         return false;

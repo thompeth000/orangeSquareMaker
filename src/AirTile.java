@@ -36,6 +36,16 @@ public class AirTile extends Entity implements Tile {
     }
 
     @Override
+    public boolean getUsed(){
+        return false;
+    }
+
+    @Override
+    public void reset(){
+
+    }
+
+    @Override
     public void setPos(TilePos position) {
         setX(position.getCol() * 20);
         setY(position.getRow() * 20);
