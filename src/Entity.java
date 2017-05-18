@@ -1,5 +1,7 @@
 import java.awt.*;
 
+
+
 /**
  * Created by thompeth000 on 4/13/2017.
  */
@@ -11,6 +13,10 @@ public abstract class Entity {
     private Game game;
     private Color color;
     private Tile[][] collideableTiles;
+    private final int ARRAYHEIGHT = 4;
+    private final int ARRAYWIDTH = 3;
+
+
 
     public void move(){
         x += dx;
@@ -31,7 +37,7 @@ public abstract class Entity {
 
 
         if(!(this instanceof Tile)) {
-            collideableTiles = new Tile[(height * 6) / 20][(width * 6) / 20];
+            collideableTiles = new Tile[ARRAYHEIGHT][ARRAYWIDTH];
             airborne = true;
         }
 
@@ -61,14 +67,17 @@ public abstract class Entity {
         airborne = a;
     }
 
+
+
+
     public double calcMovementVector(){
         return Math.atan2(dy, dx);
     }
 
     public void doTileCollisions(){
 
-        int numTiles = 0;
-        boolean tileFound = false;
+
+
         Rectangle next = new Rectangle(x + (int)dx,y + (int)dy, width, height);
 
         airborne = true;
@@ -77,7 +86,6 @@ public abstract class Entity {
 
         for(int j = 0; j < collideableTiles.length; j++){
             for(int k = 0; k < collideableTiles[0].length; k++){
-                numTiles++;
                 if(!(getTile(j,k) instanceof AirTile) && next.intersects(collideableTiles[j][k].getBounds())){
 
                     if(x >= collideableTiles[j][k].getX() + 20){
@@ -113,7 +121,7 @@ public abstract class Entity {
 
 
 
-                            tileFound = true;
+
 
                     }
 
@@ -122,7 +130,7 @@ public abstract class Entity {
 
 
             }
-            System.out.println("Collideable Tiles: " + numTiles);
+
         }
 
 
@@ -184,8 +192,8 @@ public abstract class Entity {
     public void updateTileMap(){
         for(int i = 0; i < collideableTiles.length; i++){
             for(int j = 0; j < collideableTiles[0].length; j++){
-                collideableTiles[i][j] = game.getTile(((y - height) / 20) + i, (((x - width) / 20) + j) + (getGame().getCameraOffset() / 20));
-                collideableTiles[i][j].setPos(new TilePos(j + ((x - width) / 20),i + ((y - height) / 20), true));
+                collideableTiles[i][j] = game.getTile(((y - 10) / 20) + i, ((x - 10) / 20) + j + (getGame().getCameraOffset() / 20));
+                collideableTiles[i][j].setPos(new TilePos(((x - 10) / 20) + j,((y - 10) / 20) + i, true));
                 collideableTiles[i][j].offsetPos(getGame().getCameraOffset());
             }
         }

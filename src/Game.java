@@ -17,11 +17,12 @@ public class Game extends JPanel implements ActionListener {
     ArrayList<Entity> entities;
     BufferedImage groundSprite;
     Tile[][] tileMap;
-    Tile[][] loadedTiles;
     BufferedImage[] spriteSheet;
     Tile selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
     int cursorX, cursorY, cameraOffset, gameLoopControl, levelLength, playerSpawnX, playerSpawnY, playerSpawnOffset;
     static long gameTime;
+    final int HEIGHTINTILES = 30;
+    final int WIDTHINTILES = 40;
     boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed;
     String tileString = "Ground Tile";
 
@@ -32,9 +33,8 @@ public class Game extends JPanel implements ActionListener {
         frame.setTitle("FINAL PROJECT");
         setPreferredSize(new Dimension(800,600));
         setBackground(BACKCOLOR);
-        tileMap = new Tile[30][2048];
-        loadedTiles = new Tile[30][40];
-        spriteSheet = new BufferedImage[127];
+        tileMap = new Tile[30][2000];
+        spriteSheet = new BufferedImage[128];
         cameraOffset = 0;
         gameTime = 0;
         playerSpawnPlaced = false;
@@ -45,11 +45,6 @@ public class Game extends JPanel implements ActionListener {
             }
         }
 
-        for(int i = 0; i < loadedTiles.length; i++){
-            for(int j = 0; j < loadedTiles[i].length; j++){
-                loadedTiles[i][j] = new AirTile(Color.BLUE, j * 20, i * 20, 20, 20, this, 0);
-            }
-        }
 
 
         frame.add(this);
@@ -241,14 +236,14 @@ public class Game extends JPanel implements ActionListener {
     public void initGame(){
 
         try {
-            spriteSheet[0] = ImageIO.read(new File("src/groundTile.png"));
+            spriteSheet[0] = ImageIO.read(new File("resource/ground.png"));
         }
         catch(java.io.IOException e){
             System.out.println("Image not found!");
         }
 
         try {
-            spriteSheet[1] = ImageIO.read(new File("src/coin.png"));
+            spriteSheet[1] = ImageIO.read(new File("resource/coin.png"));
         }
         catch(java.io.IOException e){
             System.out.println("Image not found!");
@@ -287,9 +282,9 @@ public class Game extends JPanel implements ActionListener {
         setBackground(BACKCOLOR);
 
         if(GameStats.isEditor() || GameStats.isPlay()) {
-            for (int i = 0; i < loadedTiles.length; i++) {
-                for (int k = 0; k < loadedTiles[0].length; k++) {
-                    (loadedTiles[i][k]).paint(g);
+            for (int i = 0; i < HEIGHTINTILES; i++) {
+                for (int k = 0; k < WIDTHINTILES; k++) {
+                    getTile(i, (cameraOffset / 20) + k).paint(g);
                 }
             }
         }
@@ -309,6 +304,16 @@ public class Game extends JPanel implements ActionListener {
             printSimpleString("Score: " + GameStats.getScore(), getWidth(), -300, 20, g);
             printSimpleString("Lives: " + GameStats.getLives(), getWidth(), -300, 50, g);
             printSimpleString("X " + GameStats.getCoinCounter(), getWidth(), -300, 80, g);
+
+            //FOR TILE COLLISION DEBUGGING
+            /*
+            for (int i = 0; i < entities.get(0).getTileMap().length; i++) {
+                for (int k = 0; k < entities.get(0).getTileMap()[i].length; k++) {
+                    entities.get(0).getTile(i,k).paint(g);
+                }
+            }
+            */
+            //FOR TILE COLLISION DEBUGGING
         }
         if(GameStats.isDeath()){
             setBackground(Color.BLACK);
@@ -334,11 +339,11 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void loadTiles(int offset){
-        for(int i = 0; i < loadedTiles.length; i++){
-            for(int k = 0; k < 40; k++){
-                loadedTiles[i][k] = getTile(i, (offset / 20) + k).cloneTile();
-                loadedTiles[i][k].setPos(new TilePos(k, i, true));
-                loadedTiles[i][k].offsetPos(offset);
+        for(int i = 0; i < HEIGHTINTILES; i++){
+            for(int k = 0; k < WIDTHINTILES; k++){
+                //loadedTiles[i][k] = getTile(i, (offset / 20) + k).cloneTile();
+                tileMap[i][(offset / 20) + k].setPos(new TilePos(k, i, true));
+                tileMap[i][(offset / 20) + k].offsetPos(offset);
             }
 
         }
@@ -471,13 +476,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
 
     }
 
-    public Tile getLoadedTile(int row, int col){
-        if(row < loadedTiles.length && row >= 0 && col < loadedTiles[0].length && col >= 0)
-            return loadedTiles[row][col];
 
-        return new AirTile(Color.BLUE, col * 20, row * 20, 20, 20, this, 0);
-
-    }
 
     public void decrementControlVariable(){
         gameLoopControl--;
