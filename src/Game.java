@@ -348,8 +348,8 @@ public class Game extends JPanel implements ActionListener {
         for(int i = 0; i < HEIGHTINTILES; i++){
             for(int k = 0; k < WIDTHINTILES; k++){
                 //loadedTiles[i][k] = getTile(i, (offset / 20) + k).cloneTile();
-                tileMap[i][(offset / 20) + k].setPos(new TilePos(k, i, true));
-                tileMap[i][(offset / 20) + k].offsetPos(offset);
+                getTile(i, (offset / 20) + k).setPos(new TilePos(k, i, true));
+                getTile(i, (offset / 20) + k).offsetPos(offset);
             }
 
         }
