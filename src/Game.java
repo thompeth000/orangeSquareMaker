@@ -247,7 +247,7 @@ public class Game extends JPanel implements ActionListener {
         loadTiles(0);
         entities = new ArrayList<Entity>();
         addEntity(new Player(Color.ORANGE, 0, 0, 15, 40, this, 0));
-        timer = new Timer(1000/60, this);
+        timer = new Timer(17, this);
         timer.start();
     }
 
@@ -317,7 +317,7 @@ public class Game extends JPanel implements ActionListener {
                     entities.get(0).getTile(i,k).paint(g);
                 }
             }
-            */
+*/
 
 
         }

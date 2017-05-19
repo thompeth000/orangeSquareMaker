@@ -13,7 +13,7 @@ public abstract class Entity {
     private Game game;
     private Color color;
     private Tile[][] collideableTiles;
-    private final int ARRAYHEIGHT = 4;
+    private final int ARRAYHEIGHT = 5;
     private final int ARRAYWIDTH = 4;
 
 
