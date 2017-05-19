@@ -25,6 +25,10 @@ public class AirTile extends Entity implements Tile {
 
     }
 
+    public Entity clone(int originY, int originX){
+        return null;
+    }
+
     @Override
     public void offsetPos(int offset) {
         setX((getX()) - (offset % 20));

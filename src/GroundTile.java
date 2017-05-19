@@ -90,6 +90,10 @@ public class GroundTile extends Entity implements Tile {
         return new GroundTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
     }
 
+    public Entity clone(int originY, int originX){
+        return null;
+    }
+
     @Override
     public boolean getUsed(){
         return false;

@@ -12,6 +12,8 @@ public class Player extends Entity {
 
     }
 
+
+
     public void checkCollisions(int i) {
 
         //UNFINISHED
@@ -20,6 +22,10 @@ public class Player extends Entity {
 
     public void setDead(boolean b){
         dead = false;
+    }
+
+    public Entity clone(int originY, int originX){
+        return null;
     }
 
 

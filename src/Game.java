@@ -18,13 +18,13 @@ public class Game extends JPanel implements ActionListener {
     BufferedImage groundSprite;
     Tile[][] tileMap;
     BufferedImage[] spriteSheet;
-    Tile selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
+    Entity selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
     int cursorX, cursorY, cameraOffset, gameLoopControl, levelLength, playerSpawnX, playerSpawnY, playerSpawnOffset;
     static long gameTime;
     final int HEIGHTINTILES = 30;
     final int WIDTHINTILES = 40;
     boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed;
-    String tileString = "Ground Tile";
+    String selectedObjString = "Ground Tile";
 
     public Game(){
         JFrame frame = new JFrame();
@@ -71,32 +71,38 @@ public class Game extends JPanel implements ActionListener {
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_1 && GameStats.isEditor()){
-                    tileString = "Ground Tile";
+                    selectedObjString = "Ground Tile";
                     updateSelectedTile();
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_2 && GameStats.isEditor()){
-                    tileString = "Lava Tile";
+                    selectedObjString = "Lava Tile";
                     updateSelectedTile();
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_3 && GameStats.isEditor()){
-                    tileString = "Coin";
+                    selectedObjString = "Coin";
                     updateSelectedTile();
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_4 && GameStats.isEditor()){
-                    tileString = "Goal";
+                    selectedObjString = "Goal";
                     updateSelectedTile();
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_5 && GameStats.isEditor()){
-                    tileString = "Player Spawn";
+                    selectedObjString = "Player Spawn";
                     updateSelectedTile();
                 }
 
+                if(e.getKeyCode() == KeyEvent.VK_6 && GameStats.isEditor()){
+                    selectedObjString = "Goomba";
+                    updateSelectedTile();
+                }
+
+
                 if(e.getKeyCode() == KeyEvent.VK_0 && GameStats.isEditor()){
-                    tileString = "Erase";
+                    selectedObjString = "Erase";
                     updateSelectedTile();
                 }
 
@@ -296,7 +302,7 @@ public class Game extends JPanel implements ActionListener {
         if(GameStats.isEditor()) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
-            printSimpleString(tileString, getWidth(), -300, 20, g);
+            printSimpleString(selectedObjString, getWidth(), -300, 20, g);
         }
         if(GameStats.isPlay()){
             for (Entity obj : entities) {
@@ -375,7 +381,13 @@ public class Game extends JPanel implements ActionListener {
        }
 
        if (click) {
-           setTile(cursorX, cursorY, cameraOffset, selectedTile);
+           if(selectedObject instanceof Tile) {
+               setTile(cursorX, cursorY, cameraOffset, (Tile)selectedObject);
+           }
+           else{
+               entities.add(selectedObject.clone(cursorY, cursorX));
+
+           }
        }
 
    }
@@ -424,27 +436,30 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     }
 
     public void updateSelectedTile(){
-        switch(tileString){
+        switch(selectedObjString){
             case "Erase":
-                selectedTile = new AirTile(Color.BLUE, 0, 0, 20, 20, this, 0);
+                selectedObject = new AirTile(Color.BLUE, 0, 0, 20, 20, this, 0);
                 break;
             case "Ground Tile":
-                selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
+                selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
                 break;
             case "Lava Tile":
-                selectedTile = new LavaTile(Color.RED, 0, 0, 20, 20, this, 0);
+                selectedObject = new LavaTile(Color.RED, 0, 0, 20, 20, this, 0);
                 break;
             case "Coin":
-                selectedTile = new CoinTile(Color.YELLOW, 0, 0, 20, 20, this, 0, true);
+                selectedObject = new CoinTile(Color.YELLOW, 0, 0, 20, 20, this, 0, true);
                 break;
             case "Goal":
-                selectedTile = new GoalTile(new Color(255,0,255), 0, 0, 20, 20, this, 0);
+                selectedObject = new GoalTile(new Color(255,0,255), 0, 0, 20, 20, this, 0);
                 break;
             case "Player Spawn":
-                selectedTile = new PlayerStartTile(Color.ORANGE, 0, 0, 20, 20, this, 0);
+                selectedObject = new PlayerStartTile(Color.ORANGE, 0, 0, 20, 20, this, 0);
+                break;
+            case "Goomba":
+                selectedObject = new Goomba(new Color(139,69,19),0,0, 15, 15, this, 0,0,0);
                 break;
             default:
-                selectedTile = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
+                selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
         }
     }
 
@@ -476,6 +491,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     public Entity getEntity(int index){
         return entities.get(index);
     }
+
 
     public Tile getTile(int row, int col){
          if(row < tileMap.length && row >= 0 && col < tileMap[0].length && col >= 0)

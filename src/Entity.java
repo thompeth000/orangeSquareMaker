@@ -134,6 +134,7 @@ public abstract class Entity {
         }
 
 
+    public abstract Entity clone(int originY, int originX);
 
     public Rectangle getBounds(){
         return new Rectangle(x,y,width,height);
@@ -142,6 +143,7 @@ public abstract class Entity {
     public int getX() {
         return x;
     }
+
 
     public Tile[][] getTileMap(){
         return collideableTiles;

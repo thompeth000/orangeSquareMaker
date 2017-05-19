@@ -17,6 +17,10 @@ public class CoinTile extends Entity implements Tile {
 
     }
 
+    public Entity clone(int originY, int originX){
+        return null;
+    }
+
     @Override
     public boolean getUsed(){
         return used;
