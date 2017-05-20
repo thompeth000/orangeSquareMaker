@@ -19,12 +19,13 @@ public class Game extends JPanel implements ActionListener {
     Tile[][] tileMap;
     BufferedImage[] spriteSheet;
     Entity selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
-    int cursorX, cursorY, cameraOffset, gameLoopControl, levelLength, playerSpawnX, playerSpawnY, playerSpawnOffset;
+    int cursorX, cursorY, cameraOffset, gameLoopControl, levelLength, playerSpawnX, playerSpawnY, playerSpawnOffset, entCount;
     static long gameTime;
     final int HEIGHTINTILES = 30;
     final int WIDTHINTILES = 40;
-    boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed;
+    boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed, entityPlaced, eraseMode;
     String selectedObjString = "Ground Tile";
+    final int SIMULATIONRADIUS = 500;
 
     public Game(){
         JFrame frame = new JFrame();
@@ -38,6 +39,10 @@ public class Game extends JPanel implements ActionListener {
         cameraOffset = 0;
         gameTime = 0;
         playerSpawnPlaced = false;
+        entityPlaced = false;
+        entCount = 1;
+
+
 
         for(int i = 0; i < tileMap.length; i++){
             for(int j = 0; j < tileMap[i].length; j++){
@@ -117,10 +122,12 @@ public class Game extends JPanel implements ActionListener {
                         startGame();
                     }
                     else {
+                        entities.get(0).setDead(false);
                         GameStats.resetScore();
                         GameStats.resetLives();
                         GameStats.resetCoins();
                         resetTiles();
+                        resetEntities();
                         GameStats.setEditor();
                     }
                 }
@@ -173,6 +180,7 @@ public class Game extends JPanel implements ActionListener {
                 super.mouseReleased(e);
                 if(e.getButton() == MouseEvent.BUTTON1){
                     click = false;
+                    entityPlaced = false;
                 }
             }
 
@@ -208,6 +216,12 @@ public class Game extends JPanel implements ActionListener {
         Game game = new Game();
         game.initGame();
 
+    }
+
+    public void resetEntities(){
+        for(int i = 1; i < entities.size(); i++){
+            entities.get(i).resetEnt();
+        }
     }
 
     public int getControlVar(){
@@ -260,6 +274,7 @@ public class Game extends JPanel implements ActionListener {
     public void startGame(){
 
         resetTiles();
+        resetEntities();
         levelLength = findLevelLength();
         GameStats.setPlay();
         if(playerSpawnPlaced) {
@@ -303,8 +318,8 @@ public class Game extends JPanel implements ActionListener {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
             printSimpleString(selectedObjString, getWidth(), -300, 20, g);
-            for (Entity obj : entities) {
-                obj.paint(g);
+            for (int i = 1; i < entities.size(); i++) {
+                getEntity(i).paint(g);
             }
         }
         if(GameStats.isPlay()){
@@ -371,25 +386,42 @@ public class Game extends JPanel implements ActionListener {
 
    if(GameStats.isEditor()) {
        if (aPressed) {
-           cameraOffset -= 10;
+           scroll(-10);
 
            if (cameraOffset < 0) {
-               cameraOffset = 0;
+               scrollTo(0);
            }
        }
 
        if (dPressed) {
-           cameraOffset += 10;
+           scroll(10);
 
        }
 
        if (click) {
-           if(selectedObject instanceof Tile) {
-               setTile(cursorX, cursorY, cameraOffset, (Tile)selectedObject);
+           boolean entityFound = false;
+           if(eraseMode) {
+               System.out.println("Game Loop: " + entities.size());
+               for(int i = 1; i < entities.size(); i++){
+                   if(getEntity(i).getBounds().contains(cursorX, cursorY)){
+                    removeEntity(i);
+                    i--;
+                    System.out.println("Game Loop 2: " + entities.size());
+                    entityFound = true;
+                    entCount--;
+                   }
+                   if(entityFound)
+                       break;
+               }
            }
-           else{
-               entities.add(selectedObject.clone(cursorY, cursorX));
-
+           if(!entityFound) {
+               if (selectedObject instanceof Tile) {
+                   setTile(cursorX, cursorY, cameraOffset, (Tile) selectedObject);
+               } else if (!entityPlaced) {
+                   entities.add(selectedObject.clone(cursorY, cursorX));
+                   entityPlaced = true;
+                   entCount++;
+               }
            }
        }
 
@@ -397,6 +429,7 @@ public class Game extends JPanel implements ActionListener {
 
    if(GameStats.isPlay()){
        for(gameLoopControl = 0; gameLoopControl < getNextIndex(); gameLoopControl++){
+           if(Math.abs(entities.get(gameLoopControl).getX() - (getWidth() / 2)) < SIMULATIONRADIUS)
            entities.get(gameLoopControl).update(gameLoopControl);
        }
    }
@@ -404,10 +437,8 @@ public class Game extends JPanel implements ActionListener {
    if(GameStats.isDeath()|| GameStats.isGameOver()){
        if(gameTime - GameStats.getDeathStartTime() > 120){
            startGame();
+           (entities.get(0)).setDead(false);
 
-           if(entities.get(0) instanceof Player) {
-               ((Player) entities.get(0)).setDead(false);
-           }
        }
    }
 
@@ -439,9 +470,11 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     }
 
     public void updateSelectedTile(){
+        eraseMode = false;
         switch(selectedObjString){
             case "Erase":
                 selectedObject = new AirTile(Color.BLUE, 0, 0, 20, 20, this, 0);
+                eraseMode = true;
                 break;
             case "Ground Tile":
                 selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
@@ -459,7 +492,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
                 selectedObject = new PlayerStartTile(Color.ORANGE, 0, 0, 20, 20, this, 0);
                 break;
             case "Goomba":
-                selectedObject = new Goomba(new Color(139,69,19),0,0, 20, 20, this, 0,0,0);
+                selectedObject = new Goomba(new Color(139,69,19),0,0, 20, 20, this, 0);
                 break;
             default:
                 selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
@@ -492,6 +525,8 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     }
 
     public Entity getEntity(int index){
+        if(entities.get(index) == null)
+            return new AirTile(Color.BLUE, 0, 0, 20, 20, this, 0);
         return entities.get(index);
     }
 

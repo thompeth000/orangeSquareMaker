@@ -4,14 +4,12 @@ import java.awt.*;
  * Created by Ethan on 5/20/2017.
  */
 public class Goomba extends Entity {
-    private boolean dead;
 
 
-    public Goomba(Color color, int x, int y, int width, int height, Game game, int originY, int originX, int index){
+
+    public Goomba(Color color, int x, int y, int width, int height, Game game, int index){
         super(color, x, y, width, height, game, index);
-        dead = false;
-        setX(originX);
-        setY(originY);
+
         setDx(-4);
 
     }
@@ -22,18 +20,19 @@ public class Goomba extends Entity {
         doTileCollisions();
     }
 
-    public void setDead(boolean b){
-        dead = b;
-    }
 
 
-    public Entity clone(int originY, int originX){
-        return new Goomba(getColor(), originX, originY, getWidth(), getHeight(), getGame(), originY, originX, getGame().getNextIndex());
+
+    public Entity clone(int y, int x){
+        return new Goomba(getColor(), x, y, getWidth(), getHeight(), getGame(), getGame().getNextIndex());
     }
 
 
     public void update(int i) {
         updateTileMap();
+
+        if(getDx() == 0)
+            toggleWalkingDirection();
 
         if(isWalkingLeft()){
             setDx(-5);
@@ -42,11 +41,11 @@ public class Goomba extends Entity {
             setDx(5);
 
 
-        if ((isAirborne() || dead) && getDy() < 30){
+        if ((isAirborne() || isDead()) && getDy() < 30){
             setDy(getDy() + 1);
         }
 
-        if(!dead) {
+        if(!isDead()) {
             checkCollisions(i);
         }
         move();
@@ -66,7 +65,7 @@ public class Goomba extends Entity {
 
 
     public boolean isPlayerObject() {
-        return true;
+        return false;
     }
 
 
@@ -78,7 +77,7 @@ public class Goomba extends Entity {
     }
 
     public void kill(int i){
-        dead = true;
+        setDead(true);
         setDy(-10);
     }
 }

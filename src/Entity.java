@@ -7,8 +7,12 @@ import java.awt.*;
  */
 public abstract class Entity {
 
+    private boolean dead;
+
     private boolean airborne, walkingLeft;
     private int x, y, width, height, index;
+    private final int ORIGINX;
+    private final int ORIGINY;
     private double dx, dy;
     private Game game;
     private Color color;
@@ -24,12 +28,28 @@ public abstract class Entity {
 
     }
 
+    public void setDead(boolean b){
+        dead = b;
+    }
+
+    public boolean isDead(){
+        return dead;
+    }
+
     public void toggleWalkingDirection(){
         if(walkingLeft){
             walkingLeft = false;
         }
         else
             walkingLeft = true;
+    }
+
+    public void resetEnt(){
+        x = ORIGINX - getGame().getCameraOffset();
+        y = ORIGINY;
+        dead = false;
+        airborne = false;
+        walkingLeft = true;
     }
 
 
@@ -39,6 +59,8 @@ public abstract class Entity {
         this.color = color;
         this.x = x;
         this.y = y;
+        ORIGINX = x + getGame().getCameraOffset();
+        ORIGINY = y;
         this.width = width;
         this.height = height;
         dx = 10;
@@ -96,46 +118,45 @@ public abstract class Entity {
             for(int k = 0; k < collideableTiles[0].length; k++){
                 if(!(getTile(j,k) instanceof AirTile) && next.intersects(collideableTiles[j][k].getBounds())){
 
+                    boolean betweenHoriz = (x + width > collideableTiles[j][k].getX() && x < collideableTiles[j][k].getX() + 20);
+                    boolean betweenVert = (y + height > collideableTiles[j][k].getY() && y < collideableTiles[j][k].getY() + 20);
 
 
-                    if(x >= collideableTiles[j][k].getX() + 20 && y + height > collideableTiles[j][k].getY()){
-                        if(collideableTiles[j][k].isCollideable()) {
-                            x = collideableTiles[j][k].getX() + 20;
-                            System.out.println("Collision 3");
-                            if(this instanceof Player) {
+
+
+                        if (x >= collideableTiles[j][k].getX() + 10 && betweenVert) {
+                            if (collideableTiles[j][k].isCollideable()) {
+                                x = collideableTiles[j][k].getX() + 20;
+                                System.out.println("Collision 3");
                                 dx = 0;
+
                             }
-                            else
-                                toggleWalkingDirection();
-                        }
-                        collideableTiles[j][k].interact(this, 3);
-                    } else if(x + width < collideableTiles[j][k].getX() + 1 && y + height > collideableTiles[j][k].getY()) {
-                        if(collideableTiles[j][k].isCollideable()) {
-                            x = collideableTiles[j][k].getX() - width;
-                            if(this instanceof Player) {
+                            collideableTiles[j][k].interact(this, 3);
+                        } else if (x + width <= collideableTiles[j][k].getX() + 10 && betweenVert) {
+                            if (collideableTiles[j][k].isCollideable()) {
+                                x = collideableTiles[j][k].getX() - width;
                                 dx = 0;
+
+                                System.out.println("Collision 4");
                             }
-                            else
-                                toggleWalkingDirection();
-                            System.out.println("Collision 4");
+                            collideableTiles[j][k].interact(this, 4);
+                        } else if (y >= collideableTiles[j][k].getY() + 10 && betweenHoriz) {
+                            if (collideableTiles[j][k].isCollideable()) {
+                                y = collideableTiles[j][k].getY() + 20;
+                                dy = 0;
+                                System.out.println("Collision 1");
+                            }
+                            collideableTiles[j][k].interact(this, 1);
+                        } else if (y + height <= collideableTiles[j][k].getY() + 10 && betweenHoriz) {
+                            if (collideableTiles[j][k].isCollideable()) {
+                                y = collideableTiles[j][k].getY() - height;
+                                dy = 0;
+                                airborne = false;
+                                System.out.println("Collision 2");
+                            }
+                            collideableTiles[j][k].interact(this, 2);
                         }
-                        collideableTiles[j][k].interact(this, 4);
-                    }else if (y >= collideableTiles[j][k].getY() + 20) {
-                        if(collideableTiles[j][k].isCollideable()) {
-                            y = collideableTiles[j][k].getY() + 20;
-                            dy = 0;
-                            System.out.println("Collision 1");
-                        }
-                        collideableTiles[j][k].interact(this, 1);
-                        }else if (y + height < collideableTiles[j][k].getY() + 1) {
-                        if(collideableTiles[j][k].isCollideable()) {
-                            y = collideableTiles[j][k].getY() - height;
-                            dy = 0;
-                            airborne = false;
-                            System.out.println("Collision 2");
-                        }
-                        collideableTiles[j][k].interact(this, 2);
-                        }
+
 
 
 
@@ -152,7 +173,7 @@ public abstract class Entity {
         }
 
 
-    public abstract Entity clone(int originY, int originX);
+    public abstract Entity clone(int y, int x);
 
     public boolean isWalkingLeft(){
         return walkingLeft;
