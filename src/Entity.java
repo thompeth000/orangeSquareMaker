@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public abstract class Entity {
 
-    private boolean airborne;
+    private boolean airborne, walkingLeft;
     private int x, y, width, height, index;
     private double dx, dy;
     private Game game;
@@ -19,9 +19,17 @@ public abstract class Entity {
 
 
     public void move(){
-        x += dx;
         y += dy;
+        x += dx;
 
+    }
+
+    public void toggleWalkingDirection(){
+        if(walkingLeft){
+            walkingLeft = false;
+        }
+        else
+            walkingLeft = true;
     }
 
 
@@ -88,17 +96,27 @@ public abstract class Entity {
             for(int k = 0; k < collideableTiles[0].length; k++){
                 if(!(getTile(j,k) instanceof AirTile) && next.intersects(collideableTiles[j][k].getBounds())){
 
-                    if(x >= collideableTiles[j][k].getX() + 20){
+
+
+                    if(x >= collideableTiles[j][k].getX() + 20 && y + height > collideableTiles[j][k].getY()){
                         if(collideableTiles[j][k].isCollideable()) {
                             x = collideableTiles[j][k].getX() + 20;
                             System.out.println("Collision 3");
-                            dx = 0;
+                            if(this instanceof Player) {
+                                dx = 0;
+                            }
+                            else
+                                toggleWalkingDirection();
                         }
                         collideableTiles[j][k].interact(this, 3);
-                    } else if(x + width < collideableTiles[j][k].getX() + 1) {
+                    } else if(x + width < collideableTiles[j][k].getX() + 1 && y + height > collideableTiles[j][k].getY()) {
                         if(collideableTiles[j][k].isCollideable()) {
                             x = collideableTiles[j][k].getX() - width;
-                            dx = 0;
+                            if(this instanceof Player) {
+                                dx = 0;
+                            }
+                            else
+                                toggleWalkingDirection();
                             System.out.println("Collision 4");
                         }
                         collideableTiles[j][k].interact(this, 4);
@@ -135,6 +153,10 @@ public abstract class Entity {
 
 
     public abstract Entity clone(int originY, int originX);
+
+    public boolean isWalkingLeft(){
+        return walkingLeft;
+    }
 
     public Rectangle getBounds(){
         return new Rectangle(x,y,width,height);

@@ -252,7 +252,7 @@ public class Game extends JPanel implements ActionListener {
 
         loadTiles(0);
         entities = new ArrayList<Entity>();
-        addEntity(new Player(Color.ORANGE, 0, 0, 15, 40, this, 0));
+        addEntity(new Player(Color.ORANGE, 0, 0, 20, 20, this, 0));
         timer = new Timer(17, this);
         timer.start();
     }
@@ -303,6 +303,9 @@ public class Game extends JPanel implements ActionListener {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
             printSimpleString(selectedObjString, getWidth(), -300, 20, g);
+            for (Entity obj : entities) {
+                obj.paint(g);
+            }
         }
         if(GameStats.isPlay()){
             for (Entity obj : entities) {
@@ -456,7 +459,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
                 selectedObject = new PlayerStartTile(Color.ORANGE, 0, 0, 20, 20, this, 0);
                 break;
             case "Goomba":
-                selectedObject = new Goomba(new Color(139,69,19),0,0, 15, 15, this, 0,0,0);
+                selectedObject = new Goomba(new Color(139,69,19),0,0, 20, 20, this, 0,0,0);
                 break;
             default:
                 selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
@@ -510,7 +513,6 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
 
     public void setTile(TilePos pos, Tile newTile){
         tileMap[pos.getRow()][pos.getCol()] = newTile.cloneTile();
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     public int findLevelLength(){
@@ -534,7 +536,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     public void scroll(int a){
         cameraOffset += a;
         for(int i = 1; i < entities.size(); i++){
-            entities.get(i).setX(entities.get(i).getX() + a);
+            entities.get(i).setX(entities.get(i).getX() - a);
         }
     }
 
