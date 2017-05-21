@@ -2,8 +2,8 @@
  * Created by thompeth000 on 4/20/2017.
  */
 public class GameStats {
-    public static boolean editor = true;
-    public static boolean play, pause, death, gameOver, levelEnd, textFlicker;
+    public static boolean title = true;
+    public static boolean play, editor, pause, death, gameOver, levelEnd, textFlicker;
     public static int score;
     public static int lives = 3;
     public static long deathStartTime;
@@ -19,6 +19,10 @@ public class GameStats {
             lives++;
             coinCounter = 0;
         }
+    }
+
+    public static boolean isTitle(){
+        return title;
     }
 
     public static int getCoinCounter(){
@@ -78,6 +82,7 @@ public class GameStats {
         death = false;
         gameOver = false;
         levelEnd = false;
+        title = false;
     }
 
     public static void setEditor(){
@@ -87,6 +92,7 @@ public class GameStats {
         death = false;
         gameOver = false;
         levelEnd = false;
+        title = false;
     }
 
     public static void setPause(){
@@ -96,6 +102,7 @@ public class GameStats {
         death = false;
         gameOver = false;
         levelEnd = false;
+        title = false;
     }
 
     public static void setDeath(boolean outOfLives){
@@ -106,6 +113,7 @@ public class GameStats {
             death = true;
             gameOver = false;
             levelEnd = false;
+            title = false;
         }
         else{
             play = false;
@@ -114,6 +122,7 @@ public class GameStats {
             death = false;
             gameOver = true;
             levelEnd = false;
+            title = false;
             lives = 3;
             score = 0;
         }
@@ -127,6 +136,17 @@ public class GameStats {
         death = false;
         gameOver = false;
         levelEnd = true;
+        title = false;
+    }
+
+    public static void setTitle(){
+        play = false;
+        pause = false;
+        editor = false;
+        death = false;
+        gameOver = false;
+        levelEnd = false;
+        title = true;
     }
 
     public static boolean isLevelEnd(){

@@ -370,12 +370,30 @@ public class Game extends JPanel implements ActionListener {
             g.setFont(new Font("Lucida Console", Font.BOLD, 64));
             printSimpleString("COURSE CLEAR!", getWidth(), 0, 150, g);
 
+            g.setFont(new Font("Lucida Console", Font.BOLD, 48));
             if(GameStats.getTextFlicker()) {
                 printSimpleString("FINAL SCORE: " + GameStats.getScore(), getWidth(), 0, 350, g);
             }
 
             g.setFont(new Font("Lucida Console", Font.BOLD, 32));
             printSimpleString("PRESS SPACE TO PLAY AGAIN!", getWidth(), 0, 550, g);
+        }
+
+        if(GameStats.isTitle()){
+            setBackground(Color.BLACK);
+            g.setColor(Color.ORANGE);
+            g.fillRect(50,20,700,300);
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 64));
+            printSimpleString("SUPER ORANGE", getWidth(), 0, 140, g);
+            printSimpleString("SQUARE MAKER", getWidth(), 0, 204, g);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 48));
+            if(GameStats.getTextFlicker()){
+                printSimpleString("PRESS SPACE TO BEGIN!", getWidth(), 0, 420, g);
+            }
+            g.setFont(new Font("Lucida Console", Font.BOLD, 24));
+            printSimpleString("By Ethan Thompson, 2017", getWidth(), -200, 570, g);
         }
 
     }
@@ -474,6 +492,12 @@ public class Game extends JPanel implements ActionListener {
        }
 
    }
+
+        if(GameStats.isTitle()){
+            if(spacePressed) {
+                GameStats.setEditor();
+            }
+        }
 
     repaint();
 

@@ -18,9 +18,10 @@ public class Player extends Entity {
         doTileCollisions();
 
         for(int k = 1; k < getGame().getNextIndex(); k++){
-            if(!getGame().getEntity(k).isDead() && !getGame().getEntity(k).isPlayerObject() && getBounds().intersects(getGame().getEntity(k).getBounds())){
-                if(getY() - getDy() + getHeight() <= getGame().getEntity(k).getY()){
-                    getGame().getEntity(k).kill(k);
+            Entity ent = getGame().getEntity(k);
+            if(!ent.isDead() && !ent.isPlayerObject() && getBounds().intersects(ent.getBounds())){
+                if(getX() - getDx() + getWidth() > ent.getX() - ent.getDx() && getX() - getDx() < ent.getX() + ent.getWidth() - ent.getDx()){
+                    ent.kill(k);
                     setDy(-10);
                     GameStats.incrementScore(100);
 
