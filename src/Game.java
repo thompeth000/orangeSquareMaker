@@ -23,7 +23,7 @@ public class Game extends JPanel implements ActionListener {
     static long gameTime;
     final int HEIGHTINTILES = 30;
     final int WIDTHINTILES = 40;
-    boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed, entityPlaced, eraseMode;
+    boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed, spacePressed, entityPlaced, eraseMode;
     String selectedObjString = "Ground Tile";
     final int SIMULATIONRADIUS = 500;
 
@@ -112,9 +112,7 @@ public class Game extends JPanel implements ActionListener {
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-
-
-
+                    spacePressed = true;
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_P) {
@@ -136,15 +134,19 @@ public class Game extends JPanel implements ActionListener {
             @Override
             public void keyReleased(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_W){
-                 wPressed = false;
+                    wPressed = false;
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_D){
-                dPressed = false;
+                    dPressed = false;
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_A){
-                aPressed = false;
+                    aPressed = false;
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    spacePressed = false;
                 }
 
             }
@@ -274,7 +276,6 @@ public class Game extends JPanel implements ActionListener {
     public void startGame(){
 
         resetTiles();
-        resetEntities();
         levelLength = findLevelLength();
         GameStats.setPlay();
         if(playerSpawnPlaced) {
@@ -282,6 +283,7 @@ public class Game extends JPanel implements ActionListener {
             entities.get(0).setY(playerSpawnY);
             cameraOffset = playerSpawnOffset;
         }
+        resetEntities();
     }
 
     public void resetTiles(){
@@ -362,6 +364,20 @@ public class Game extends JPanel implements ActionListener {
             printSimpleString("GAME OVER", getWidth(), 0, 300, g);
         }
 
+        if(GameStats.isLevelEnd()){
+            setBackground(Color.BLACK);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 64));
+            printSimpleString("COURSE CLEAR!", getWidth(), 0, 150, g);
+
+            if(GameStats.getTextFlicker()) {
+                printSimpleString("FINAL SCORE: " + GameStats.getScore(), getWidth(), 0, 350, g);
+            }
+
+            g.setFont(new Font("Lucida Console", Font.BOLD, 32));
+            printSimpleString("PRESS SPACE TO PLAY AGAIN!", getWidth(), 0, 550, g);
+        }
+
     }
 
     public int getNextIndex(){
@@ -383,6 +399,9 @@ public class Game extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         gameTime++;
+
+        if(gameTime % 60 == 0)
+            GameStats.toggleTextFlicker();
 
    if(GameStats.isEditor()) {
        if (aPressed) {
@@ -440,6 +459,20 @@ public class Game extends JPanel implements ActionListener {
            (entities.get(0)).setDead(false);
 
        }
+   }
+
+   if(GameStats.isLevelEnd()){
+       if(spacePressed) {
+           entities.get(0).setDead(false);
+           scrollTo(0);
+           resetEntities();
+           resetTiles();
+           GameStats.resetCoins();
+           GameStats.resetLives();
+           GameStats.resetScore();
+           GameStats.setEditor();
+       }
+
    }
 
     repaint();

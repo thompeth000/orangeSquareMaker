@@ -3,7 +3,7 @@
  */
 public class GameStats {
     public static boolean editor = true;
-    public static boolean play, pause, death, gameOver;
+    public static boolean play, pause, death, gameOver, levelEnd, textFlicker;
     public static int score;
     public static int lives = 3;
     public static long deathStartTime;
@@ -77,6 +77,7 @@ public class GameStats {
         editor = false;
         death = false;
         gameOver = false;
+        levelEnd = false;
     }
 
     public static void setEditor(){
@@ -85,6 +86,7 @@ public class GameStats {
         editor = true;
         death = false;
         gameOver = false;
+        levelEnd = false;
     }
 
     public static void setPause(){
@@ -93,6 +95,7 @@ public class GameStats {
         editor = false;
         death = false;
         gameOver = false;
+        levelEnd = false;
     }
 
     public static void setDeath(boolean outOfLives){
@@ -102,6 +105,7 @@ public class GameStats {
             editor = false;
             death = true;
             gameOver = false;
+            levelEnd = false;
         }
         else{
             play = false;
@@ -109,9 +113,35 @@ public class GameStats {
             editor = false;
             death = false;
             gameOver = true;
+            levelEnd = false;
             lives = 3;
             score = 0;
         }
         deathStartTime = Game.getTime();
+    }
+
+    public static void setLevelEnd(){
+        play = false;
+        pause = false;
+        editor = false;
+        death = false;
+        gameOver = false;
+        levelEnd = true;
+    }
+
+    public static boolean isLevelEnd(){
+        return levelEnd;
+    }
+
+    public static boolean getTextFlicker(){
+        return textFlicker;
+    }
+
+    public static void toggleTextFlicker(){
+        if(textFlicker){
+            textFlicker = false;
+        }
+        else
+            textFlicker = true;
     }
 }

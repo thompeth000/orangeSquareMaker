@@ -74,7 +74,9 @@ public class GoalTile extends Entity implements Tile {
 
     @Override
     public void interact(Entity ent, int side) {
-//TO BE IMPLEMENTED
+        if(ent instanceof Player){
+            GameStats.setLevelEnd();
+        }
     }
 
 
