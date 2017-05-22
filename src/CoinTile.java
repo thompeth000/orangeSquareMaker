@@ -100,6 +100,10 @@ public class CoinTile extends Entity implements Tile {
         return new CoinTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0, visible);
     }
 
+    public void interact(Entity ent){
+
+    }
+
 
     public boolean checkWallCollision() {
         return false;
@@ -125,7 +129,7 @@ public class CoinTile extends Entity implements Tile {
         setX((getX()) - (offset % 20));
     }
 
-    public void kill(int i){
+    public void kill(int i, int deathType){
 
     }
 }

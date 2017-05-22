@@ -116,7 +116,11 @@ public class GoalTile extends Entity implements Tile {
 
     }
 
-    public void kill(int i){
+    public void interact(Entity ent){
+
+    }
+
+    public void kill(int i, int deathType){
 
     }
 }

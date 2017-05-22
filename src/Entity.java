@@ -85,12 +85,16 @@ public abstract class Entity {
         game.removeEntity(index);
     }
 
-    public abstract void kill(int i);
+    public abstract void kill(int i, int deathType);
 
     public abstract boolean checkWallCollision();
 
     public void decrementIndex(){
         index--;
+    }
+
+    public void setWalkingLeft(boolean b){
+        walkingLeft = b;
     }
 
     public void setAirborne(boolean a){
@@ -170,6 +174,8 @@ public abstract class Entity {
 
 
     public abstract Entity clone(int y, int x);
+
+    public abstract void interact(Entity ent);
 
     public boolean isWalkingLeft(){
         return walkingLeft;

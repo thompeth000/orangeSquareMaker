@@ -80,7 +80,7 @@ public class LavaTile extends Entity implements Tile {
 
     @Override
     public void interact(Entity ent, int side) {
-        ent.kill(getGame().getControlVar());
+        ent.kill(getGame().getControlVar(), 0);
     }
 
 
@@ -114,7 +114,11 @@ public class LavaTile extends Entity implements Tile {
         g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
 
-    public void kill(int i){
+    public void interact(Entity ent){
+
+    }
+
+    public void kill(int i, int deathType){
 
     }
 }

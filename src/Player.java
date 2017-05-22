@@ -17,17 +17,20 @@ public class Player extends Entity {
     public void checkCollisions(int i) {
         doTileCollisions();
 
-        for(int k = 1; k < getGame().getNextIndex(); k++){
+        for(int k = 1; k < getGame().getNextIndex(); k++) {
             Entity ent = getGame().getEntity(k);
-            if(!ent.isDead() && !ent.isPlayerObject() && getBounds().intersects(ent.getBounds())){
-                if(getX() - getDx() + getWidth() > ent.getX() - ent.getDx() && getX() - getDx() < ent.getX() + ent.getWidth() - ent.getDx()){
-                    ent.kill(k);
-                    setDy(-10);
-                    GameStats.incrementScore(100);
 
+            if (!ent.isDead() && getBounds().intersects(ent.getBounds())) {
+                ent.interact(this);
+                if (!ent.isPlayerObject() ) {
+                    if (getX() - getDx() + getWidth() > ent.getX() - ent.getDx() && getX() - getDx() < ent.getX() + ent.getWidth() - ent.getDx()) {
+                        ent.kill(k, 1);
+                        setDy(-10);
+                        GameStats.incrementScore(100);
+
+                    } else
+                        kill(i, 0);
                 }
-                else
-                    kill(i);
             }
         }
     }
@@ -111,7 +114,11 @@ if(!isDead()) {
 
     }
 
-    public void kill(int i){
+    public void interact(Entity ent){
+
+    }
+
+    public void kill(int i, int deathType){
     setDead(true);
     setDx(0);
     setDy(-10);

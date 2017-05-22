@@ -120,7 +120,11 @@ public class GroundTile extends Entity implements Tile {
         g.drawImage(getGame().getSprite(0), getX(), getY(), getWidth(), getHeight(), null);
     }
 
-    public void kill(int i){
+    public void interact(Entity ent){
+
+    }
+
+    public void kill(int i, int deathType){
 
     }
 }

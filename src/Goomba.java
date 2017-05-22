@@ -76,8 +76,12 @@ public class Goomba extends Entity {
 
     }
 
-    public void kill(int i){
+    public void kill(int i, int deathType){
         setDead(true);
         setDy(-10);
+    }
+
+    public void interact(Entity ent){
+
     }
 }

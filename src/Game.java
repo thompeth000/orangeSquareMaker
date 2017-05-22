@@ -105,6 +105,12 @@ public class Game extends JPanel implements ActionListener {
                     updateSelectedTile();
                 }
 
+                if(e.getKeyCode() == KeyEvent.VK_7 && GameStats.isEditor()){
+                    selectedObjString = "Koopa";
+                    updateSelectedTile();
+                }
+
+
 
                 if(e.getKeyCode() == KeyEvent.VK_0 && GameStats.isEditor()){
                     selectedObjString = "Erase";
@@ -550,6 +556,9 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
                 break;
             case "Goomba":
                 selectedObject = new Goomba(new Color(139,69,19),0,0, 20, 20, this, 0);
+                break;
+            case "Koopa":
+                selectedObject = new Koopa(Color.GREEN,0,0, 20, 20, this, 0);
                 break;
             default:
                 selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);

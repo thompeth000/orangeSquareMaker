@@ -106,12 +106,16 @@ public class AirTile extends Entity implements Tile {
 
     }
 
+    public void interact(Entity ent){
+
+    }
+
     @Override
     public boolean isVisible(){
         return false;
     }
 
-    public void kill(int i){
+    public void kill(int i, int deathType){
 
     }
 }
