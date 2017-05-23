@@ -80,7 +80,7 @@ public class LavaTile extends Entity implements Tile {
 
     @Override
     public void interact(Entity ent, int side) {
-        ent.kill(getGame().getControlVar(), 0);
+        ent.kill(getGame().getControlVar(), 3);
     }
 
 

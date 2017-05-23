@@ -110,6 +110,11 @@ public class Game extends JPanel implements ActionListener {
                     updateSelectedTile();
                 }
 
+                if(e.getKeyCode() == KeyEvent.VK_8 && GameStats.isEditor()){
+                    selectedObjString = "? Block (Mushroom)";
+                    updateSelectedTile();
+                }
+
 
 
                 if(e.getKeyCode() == KeyEvent.VK_0 && GameStats.isEditor()){
@@ -563,6 +568,9 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
                 break;
             case "Koopa":
                 selectedObject = new Koopa(Color.GREEN,0,0, 20, 20, this, 0);
+                break;
+            case "? Block (Mushroom)":
+                selectedObject = new QuestionTileSuperMushroom(Color.YELLOW, 0, 0, 20, 20, this, 0, true);
                 break;
             default:
                 selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
