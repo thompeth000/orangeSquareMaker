@@ -23,7 +23,7 @@ public class Game extends JPanel implements ActionListener {
     static long gameTime;
     final int HEIGHTINTILES = 30;
     final int WIDTHINTILES = 40;
-    boolean click, dPressed, aPressed, playerSpawnPlaced, wPressed, spacePressed, entityPlaced, eraseMode;
+    boolean click, dPressed, aPressed, pPressed, playerSpawnPlaced, wPressed, spacePressed, entityPlaced, eraseMode;
     String selectedObjString = "Ground Tile";
     final int SIMULATIONRADIUS = 500;
 
@@ -122,19 +122,22 @@ public class Game extends JPanel implements ActionListener {
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_P) {
-                    if(GameStats.isEditor()){
-                        startGame();
-                    }
-                    else {
-                        entities.get(0).setDead(false);
-                        GameStats.resetScore();
-                        GameStats.resetLives();
-                        GameStats.resetCoins();
-                        resetTiles();
-                        resetEntities();
-                        GameStats.setEditor();
-                    }
-                }
+
+
+                        if (GameStats.isEditor()) {
+                            startGame();
+                        } else if(GameStats.isPlay()) {
+                            entities.get(0).setDead(false);
+                            GameStats.resetScore();
+                            GameStats.resetLives();
+                            GameStats.resetCoins();
+                            resetTiles();
+                            resetEntities();
+                            GameStats.setEditor();
+                        }
+                     }
+
+
             }
 
             @Override
@@ -150,6 +153,7 @@ public class Game extends JPanel implements ActionListener {
                 if(e.getKeyCode() == KeyEvent.VK_A){
                     aPressed = false;
                 }
+
 
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     spacePressed = false;
@@ -280,16 +284,15 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void startGame(){
-
-        resetTiles();
-        levelLength = findLevelLength();
-        GameStats.setPlay();
         if(playerSpawnPlaced) {
+            resetTiles();
+            levelLength = findLevelLength();
+            GameStats.setPlay();
             entities.get(0).setX(playerSpawnX);
             entities.get(0).setY(playerSpawnY);
             cameraOffset = playerSpawnOffset;
+            resetEntities();
         }
-        resetEntities();
     }
 
     public void resetTiles(){
@@ -326,6 +329,9 @@ public class Game extends JPanel implements ActionListener {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
             printSimpleString(selectedObjString, getWidth(), -300, 20, g);
+            if(!playerSpawnPlaced){
+                printSimpleString("Spawn location not specified.", getWidth(), -160, 570, g);
+            }
             for (int i = 1; i < entities.size(); i++) {
                 getEntity(i).paint(g);
             }
@@ -444,12 +450,10 @@ public class Game extends JPanel implements ActionListener {
        if (click) {
            boolean entityFound = false;
            if(eraseMode) {
-               System.out.println("Game Loop: " + entities.size());
                for(int i = 1; i < entities.size(); i++){
                    if(getEntity(i).getBounds().contains(cursorX, cursorY)){
                     removeEntity(i);
                     i--;
-                    System.out.println("Game Loop 2: " + entities.size());
                     entityFound = true;
                     entCount--;
                    }
@@ -522,8 +526,8 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     if(selected instanceof PlayerStartTile){
 
         playerSpawnPlaced = true;
-        playerSpawnOffset = offset / 800 * 800;
-        playerSpawnX = playerSpawnOffset + (newX % 800);
+        playerSpawnOffset = offset;
+        playerSpawnX = x;
         playerSpawnY = y - entities.get(0).getHeight();
 
     }

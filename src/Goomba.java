@@ -20,6 +20,10 @@ public class Goomba extends Entity {
         doTileCollisions();
     }
 
+    public void reset(){
+
+    }
+
 
 
 

@@ -25,8 +25,11 @@ import java.awt.*;
 
             if(inShell && moving){
                 if(getDx() > 0 || getDx() < 0){
-                    for(int a = 0; a < getGame().getNextIndex(); a++){
-                        getGame().getEntity(a).kill(a, 0);
+                    for(int a = 1; a < getGame().getNextIndex(); a++){
+                        if(a == getIndex())
+                            a++;
+                        if(a < getGame().getNextIndex() && getBounds().intersects(getGame().getEntity(a).getBounds()) && !getGame().getEntity(a).isDead())
+                            getGame().getEntity(a).kill(a, 0);
                     }
                 }
             }
@@ -51,6 +54,10 @@ import java.awt.*;
             }
             else
                 setDx(5);
+
+            if(inShell){
+                setDx(getDx() * 2);
+            }
 
 
             if ((isAirborne() || isDead()) && getDy() < 30){
@@ -80,7 +87,7 @@ import java.awt.*;
 
 
         public boolean isPlayerObject() {
-            return false;
+            return (inShell && !moving);
         }
 
 
@@ -89,38 +96,54 @@ import java.awt.*;
 
         public void paint(Graphics g) {
             g.setColor(getColor());
-            g.fillRect(getX(), getY(), getWidth(), getHeight());
+            if(!inShell) {
+                g.fillRect(getX(), getY(), getWidth(), getHeight());
+            }
+            else
+                g.fillOval(getX(), getY(), getWidth(), getHeight());
 
         }
 
         public void interact(Entity ent){
+
+
             if(inShell){
-                if(ent.getX() + ent.getWidth() < getX() + (getWidth() / 2)){
-                    setDx(5);
-                    setWalkingLeft(false);
+                if(!moving) {
+                    if (ent.getX() + ent.getWidth() < getX() + (getWidth() / 2)) {
+                        setDx(5);
+                        setX(getX() + 5);
+                        setWalkingLeft(false);
+                        moving = true;
+                    } else {
+                        setDx(-5);
+                        setX(getX() - 5);
+                        setWalkingLeft(true);
+                        moving = true;
+                    }
                 }
-                else{
-                    setDx(-5);
-                    setWalkingLeft(true);
-                }
+
             }
         }
 
         public void kill(int i, int deathType){
             if(deathType == 1 || deathType == 2) {
-
                 if (!inShell) {
                     inShell = true;
                     moving = false;
                 }
                 else{
-                    moving = true;
-                    setDx(-4);
+                    moving = false;
                 }
             }else{
                 setDead(true);
                 setDy(-10);
+                moving = true;
             }
+        }
+
+        public void reset(){
+            inShell = false;
+            moving = true;
         }
     }
 

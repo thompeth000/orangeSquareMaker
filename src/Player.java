@@ -21,16 +21,19 @@ public class Player extends Entity {
             Entity ent = getGame().getEntity(k);
 
             if (!ent.isDead() && getBounds().intersects(ent.getBounds())) {
-                ent.interact(this);
+
                 if (!ent.isPlayerObject() ) {
-                    if (getX() - getDx() + getWidth() > ent.getX() - ent.getDx() && getX() - getDx() < ent.getX() + ent.getWidth() - ent.getDx()) {
+                    if (getX() - getDx() + getWidth() > ent.getX() - ent.getDx() && getX() - getDx() < ent.getX() + ent.getWidth() - ent.getDx() && getY() - getDy() + getHeight() > ent.getHeight()) {
                         ent.kill(k, 1);
                         setDy(-10);
                         GameStats.incrementScore(100);
 
                     } else
                         kill(i, 0);
+
                 }
+                else
+                ent.interact(this);
             }
         }
     }
@@ -96,7 +99,7 @@ if(!isDead()) {
         int absX = getX() + getGame().getCameraOffset();
         updateY(getDy());
 
-        if(absX < 400 || absX > 99999999){
+        if((absX < 400 || absX > 39600) && !(getGame().getCameraOffset() > 0 && getGame().getCameraOffset() < 39200)){
             System.out.println(absX);
             updateX(getDx());
         }
@@ -115,6 +118,10 @@ if(!isDead()) {
     }
 
     public void interact(Entity ent){
+
+    }
+
+    public void reset(){
 
     }
 

@@ -50,7 +50,10 @@ public abstract class Entity {
         dead = false;
         airborne = false;
         walkingLeft = true;
+        reset();
     }
+
+    public abstract void reset();
 
 
 
