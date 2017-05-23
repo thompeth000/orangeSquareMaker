@@ -115,6 +115,11 @@ public class Game extends JPanel implements ActionListener {
                     updateSelectedTile();
                 }
 
+                if(e.getKeyCode() == KeyEvent.VK_9 && GameStats.isEditor()){
+                    selectedObjString = "? Block (Coin)";
+                    updateSelectedTile();
+                }
+
 
 
                 if(e.getKeyCode() == KeyEvent.VK_0 && GameStats.isEditor()){
@@ -129,6 +134,8 @@ public class Game extends JPanel implements ActionListener {
                 if (e.getKeyCode() == KeyEvent.VK_P) {
 
 
+
+
                         if (GameStats.isEditor()) {
                             startGame();
                         } else if(GameStats.isPlay()) {
@@ -137,6 +144,7 @@ public class Game extends JPanel implements ActionListener {
                             GameStats.resetLives();
                             GameStats.resetCoins();
                             resetTiles();
+                            purgeEntities();
                             resetEntities();
                             GameStats.setEditor();
                         }
@@ -236,7 +244,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void resetEntities(){
-        for(int i = 1; i < entities.size(); i++){
+        for(int i = 0; i < entities.size(); i++){
             entities.get(i).resetEnt();
         }
     }
@@ -265,8 +273,7 @@ public class Game extends JPanel implements ActionListener {
         return spriteSheet[spriteID];
     }
 
-    public void initGame(){
-
+    public void loadSprites(){
         try {
             spriteSheet[0] = ImageIO.read(new File("resource/ground.png"));
         }
@@ -281,6 +288,34 @@ public class Game extends JPanel implements ActionListener {
             System.out.println("Image not found!");
         }
 
+        try {
+            spriteSheet[2] = ImageIO.read(new File("resource/qBlock.png"));
+        }
+        catch(java.io.IOException e){
+            System.out.println("Image not found!");
+        }
+
+        try {
+            spriteSheet[3] = ImageIO.read(new File("resource/usedBlock.png"));
+        }
+        catch(java.io.IOException e){
+            System.out.println("Image not found!");
+        }
+
+        try {
+            spriteSheet[4] = ImageIO.read(new File("resource/mushroom.png"));
+        }
+        catch(java.io.IOException e){
+            System.out.println("Image not found!");
+        }
+
+    }
+
+    public void initGame(){
+
+        loadSprites();
+
+
         loadTiles(0);
         entities = new ArrayList<Entity>();
         addEntity(new Player(Color.ORANGE, 0, 0, 20, 20, this, 0));
@@ -293,10 +328,11 @@ public class Game extends JPanel implements ActionListener {
             resetTiles();
             levelLength = findLevelLength();
             GameStats.setPlay();
-            entities.get(0).setX(playerSpawnX);
-            entities.get(0).setY(playerSpawnY);
             cameraOffset = playerSpawnOffset;
             resetEntities();
+            purgeEntities();
+            entities.get(0).setX(playerSpawnX);
+            entities.get(0).setY(playerSpawnY);
         }
     }
 
@@ -333,7 +369,8 @@ public class Game extends JPanel implements ActionListener {
         if(GameStats.isEditor()) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
-            printSimpleString(selectedObjString, getWidth(), -300, 20, g);
+            // printSimpleString(selectedObjString, getWidth(), -300, 20, g);
+            g.drawString(selectedObjString, 10, 20);
             if(!playerSpawnPlaced){
                 printSimpleString("Spawn location not specified.", getWidth(), -160, 570, g);
             }
@@ -371,7 +408,7 @@ public class Game extends JPanel implements ActionListener {
             printSimpleString("Score: " + GameStats.getScore(), getWidth(), -300, 20, g);
             printSimpleString("X " + GameStats.getLives(), getWidth(), 20, 300, g);
             g.setColor(Color.ORANGE);
-            g.fillRect(370, 260, 15, 40);
+            g.fillRect(360, 280, 20, 20);
         }
         if(GameStats.isGameOver()){
             setBackground(Color.BLACK);
@@ -570,7 +607,10 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
                 selectedObject = new Koopa(Color.GREEN,0,0, 20, 20, this, 0);
                 break;
             case "? Block (Mushroom)":
-                selectedObject = new QuestionTileSuperMushroom(Color.YELLOW, 0, 0, 20, 20, this, 0, true);
+                selectedObject = new QuestionTile(Color.YELLOW, 0, 0, 20, 20, this, 0, true, true);
+                break;
+            case "? Block (Coin)":
+                selectedObject = new QuestionTile(Color.YELLOW, 0, 0, 20, 20, this, 0, true, false);
                 break;
             default:
                 selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
@@ -578,6 +618,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     }
 
     private void printSimpleString(String s, int width, int xPos, int yPos, Graphics g2d){
+        //Contrary to the name, this actually makes things harder...
         int stringLen = (int)g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
         int start = width / 2 - stringLen / 2;
         g2d.drawString(s, start + xPos, yPos);
@@ -655,6 +696,12 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
 
     public void scrollTo(int a){
         scroll(a - cameraOffset);
+    }
+
+    public void purgeEntities(){
+        while(entities.size() > entCount){
+            removeEntity(entCount);
+        }
     }
 
 

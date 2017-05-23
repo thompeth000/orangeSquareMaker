@@ -15,8 +15,11 @@ public class Player extends Entity {
     }
 
     public void setBig(){
-        big = true;
-        setHeight(40);
+        if(!big) {
+            big = true;
+            setHeight(getHeight() * 2);
+            setY(getY() - (getHeight() / 2));
+        }
     }
 
 
@@ -126,7 +129,10 @@ if(!isDead()) {
 
     public void paint(Graphics g) {
         g.setColor(getColor());
-        g.fillRect(getX(), getY(), getWidth(), getHeight());
+
+        if(invincibilityTimer % 2 == 0) {
+            g.fillRect(getX(), getY(), getWidth(), getHeight());
+        }
 
     }
 
@@ -137,12 +143,15 @@ if(!isDead()) {
     public void reset(){
         invincibilityTimer = 0;
         big = false;
+        setHeight(20);
     }
 
     public void kill(int i, int deathType){
         if(big && deathType == 0){
+            setY(getY() + (getHeight() / 2));
             setHeight(20);
             invincibilityTimer = 60;
+            big = false;
         }else {
             setDead(true);
             setDx(0);

@@ -43,13 +43,12 @@ public class SuperMushroom extends Entity {
             setDx(4);
 
 
-        if ((isAirborne() || isDead()) && getDy() < 30){
+        if ((isAirborne()) && getDy() < 30){
             setDy(getDy() + 1);
         }
 
-        if(!isDead()) {
-            checkCollisions(i);
-        }
+        checkCollisions(i);
+
         move();
 
         if(getY() > 600){
@@ -74,19 +73,17 @@ public class SuperMushroom extends Entity {
 
     public void paint(Graphics g) {
         g.setColor(getColor());
-        g.fillRect(getX(), getY(), getWidth(), getHeight());
+        g.drawImage(getGame().getSprite(4), getX(), getY(), getWidth(), getHeight(), null);
 
     }
 
     public void kill(int i, int deathType){
-        setDead(true);
-        setDy(-10);
+
     }
 
     public void interact(Entity ent){
         if(ent instanceof Player){
             ((Player)ent).setBig();
-            ent.setY(ent.getY() - 20);
             GameStats.incrementScore(1000);
             remove(getGame().getControlVar());
         }

@@ -3,12 +3,14 @@ import java.awt.*;
 /**
  * Created by thompeth000 on 5/23/2017.
  */
-public class QuestionTileSuperMushroom extends Entity implements Tile {
-    private boolean visible, collideable, used;
+public class QuestionTile extends Entity implements Tile {
+    private boolean visible, collideable, used, mushroom;
+    int imageID = 2;
 
-    public QuestionTileSuperMushroom(Color color, int x, int y, int width, int height, Game game, int index, boolean vis){
+    public QuestionTile(Color color, int x, int y, int width, int height, Game game, int index, boolean vis, boolean mushroom){
         super(color, x, y, width, height, game, index);
         visible = vis;
+        this.mushroom = mushroom;
     }
 
     @Override
@@ -28,7 +30,7 @@ public class QuestionTileSuperMushroom extends Entity implements Tile {
     @Override
     public void reset(){
         used = false;
-        setColor(Color.YELLOW);
+        imageID = 2;
 
     }
 
@@ -83,8 +85,15 @@ public class QuestionTileSuperMushroom extends Entity implements Tile {
                     getGame().getEntity(i).kill(i, 0);
                 }
             }
-            setColor(new Color(139,69,19));
-            getGame().addEntity(new SuperMushroom(Color.RED, getX() + 5, getY() - 1, 15,15, getGame(), getGame().getNextIndex()));
+            imageID = 3;
+            if(mushroom) {
+                getGame().addEntity(new SuperMushroom(Color.RED, getX() + 5, getY() - 16, 20, 20, getGame(), getGame().getNextIndex()));
+            }
+            else{
+                getGame().addEntity(new Particle(Color.YELLOW, getX(), getY(), getWidth(), getHeight(), getGame(), getGame().getNextIndex(), 30, 0, -15));
+                GameStats.incrementCoinCounter();
+                GameStats.incrementScore(100);
+            }
             used = true;
         }
     }
@@ -101,7 +110,7 @@ public class QuestionTileSuperMushroom extends Entity implements Tile {
 
     @Override
     public Tile cloneTile() {
-        return new QuestionTileSuperMushroom(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0, visible);
+        return new QuestionTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0, visible, mushroom);
     }
 
     public void interact(Entity ent){
@@ -122,7 +131,7 @@ public class QuestionTileSuperMushroom extends Entity implements Tile {
     public void paint(Graphics g) {
         if(visible) {
             g.setColor(getColor());
-            g.fillRect(getX(), getY(), getWidth(), getHeight());
+            g.drawImage(getGame().getSprite(imageID), getX(), getY(), getWidth(), getHeight(), null);
         }
 
 
