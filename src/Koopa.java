@@ -50,10 +50,10 @@ import java.awt.*;
                 toggleWalkingDirection();
 
             if(isWalkingLeft()){
-                setDx(-5);
+                setDx(-4);
             }
             else
-                setDx(5);
+                setDx(4);
 
             if(inShell){
                 setDx(getDx() * 2);

@@ -39,10 +39,10 @@ public class Goomba extends Entity {
             toggleWalkingDirection();
 
         if(isWalkingLeft()){
-            setDx(-5);
+            setDx(-4);
         }
         else
-            setDx(5);
+            setDx(4);
 
 
         if ((isAirborne() || isDead()) && getDy() < 30){
