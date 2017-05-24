@@ -78,7 +78,7 @@ public class SuperMushroom extends Entity {
     }
 
     public void kill(int i, int deathType){
-
+        setDy(-10);
     }
 
     public void interact(Entity ent){
