@@ -90,6 +90,10 @@ import java.awt.*;
             return (inShell && !moving);
         }
 
+        public boolean isInShell(){
+            return inShell;
+        }
+
 
 
 

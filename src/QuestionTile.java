@@ -78,7 +78,8 @@ public class QuestionTile extends Entity implements Tile {
 
     @Override
     public void interact(Entity ent, int side) {
-        if((ent instanceof Player) && !used && side == 1){
+
+        if(((ent instanceof Player) && !used && side == 1) || (ent instanceof Koopa && !used && (side == 3 || side == 4) && ((Koopa) ent).isInShell())){
             Rectangle entCollision = new Rectangle(getX(), getY() - getHeight(), getWidth(), getHeight());
             for(int i = 1; i < getGame().getNextIndex(); i++){
                 if(entCollision.intersects(getGame().getEntity(i).getBounds())){
