@@ -19,11 +19,13 @@ public class Fireball extends Entity {
 
     public void checkCollisions(int i) {
         doTileCollisions();
+        boolean entFound = false;
         for(int k = 1; k < getGame().getNextIndex(); k++){
-            if(getGame().getEntity(k).isEnemy() && getBounds().intersects(getGame().getEntity(k).getBounds())) {
+            if(!entFound && getGame().getEntity(k).isEnemy() && !getGame().getEntity(k).isDead() && getBounds().intersects(getGame().getEntity(k).getBounds())) {
                 getGame().getEntity(k).kill(k, 0);
-                remove(getGame().getControlVar());
                 GameStats.decrementFireBallCount();
+                remove(i);
+                entFound = true;
             }
         }
     }
@@ -47,6 +49,11 @@ public class Fireball extends Entity {
     public void update(int i) {
         updateTileMap();
 
+        if(getY() > 600 || getDx() == 0 || Math.abs(getX() + getDx() - 400) > getGame().getSimulationRadius() - getWidth()){
+            GameStats.decrementFireBallCount();
+            remove(i);
+        }
+
         if(!isAirborne()){
             setAirborne(true);
             setDy(-10);
@@ -57,14 +64,13 @@ public class Fireball extends Entity {
             setDy(getDy() + 1);
         }
 
+
         checkCollisions(i);
 
         move();
 
-        if(getY() > 600 || getDx() == 0 || Math.abs(getX() + getDx() - 400) > getGame().getSimulationRadius() - getWidth()){
-            GameStats.decrementFireBallCount();
-            remove(i);
-        }
+
+
 
     }
 

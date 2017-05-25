@@ -93,6 +93,7 @@ public class BrickTile extends Entity implements Tile {
                 collideable = false;
                 visible = false;
                 used = true;
+                GameStats.incrementScore(50);
                 getGame().addEntity(new Particle(particleColor, getX(), getY(), 10, 10, getGame(), getGame().getNextIndex(), 120, -5, -15));
                 getGame().addEntity(new Particle(particleColor, getX(), getY() + getHeight(), 10, 10, getGame(), getGame().getNextIndex(), 120, -5, -15));
                 getGame().addEntity(new Particle(particleColor, getX() + getWidth(), getY(), 10, 10, getGame(), getGame().getNextIndex(), 120, 5, -15));

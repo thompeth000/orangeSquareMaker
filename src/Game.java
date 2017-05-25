@@ -590,6 +590,8 @@ public class Game extends JPanel implements ActionListener {
 
     repaint();
 
+        System.out.println("Ent. Count: " + entities.size());
+
     loadTiles(cameraOffset);
 
     }
