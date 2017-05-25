@@ -81,6 +81,10 @@ public class AirTile extends Entity implements Tile {
 
     }
 
+    public boolean isEnemy(){
+        return false;
+    }
+
 
     public void update(int i) {
 

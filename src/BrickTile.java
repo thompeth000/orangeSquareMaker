@@ -1,16 +1,18 @@
 import java.awt.*;
 
 /**
- * Created by thompeth000 on 5/23/2017.
+ * Created by Ethan on 5/24/2017.
  */
-public class QuestionTile extends Entity implements Tile {
-    private boolean visible, collideable, used, mushroom;
-    int imageID = 2;
+public class BrickTile extends Entity implements Tile {
 
-    public QuestionTile(Color color, int x, int y, int width, int height, Game game, int index, boolean vis, boolean mushroom){
+    private boolean visible, used;
+    private boolean collideable = true;
+
+
+    public BrickTile(Color color, int x, int y, int width, int height, Game game, int index, boolean vis){
         super(color, x, y, width, height, game, index);
         visible = vis;
-        this.mushroom = mushroom;
+
     }
 
     @Override
@@ -29,9 +31,9 @@ public class QuestionTile extends Entity implements Tile {
 
     @Override
     public void reset(){
+        visible = true;
+        collideable = true;
         used = false;
-        imageID = 2;
-
     }
 
     @Override
@@ -68,7 +70,7 @@ public class QuestionTile extends Entity implements Tile {
 
     @Override
     public boolean isCollideable() {
-        return true;
+        return collideable;
     }
 
     @Override
@@ -79,27 +81,23 @@ public class QuestionTile extends Entity implements Tile {
     @Override
     public void interact(Entity ent, int side) {
 
-        if(((ent instanceof Player) && !used && side == 1) || (ent instanceof Koopa && !used && (side == 3 || side == 4) && ((Koopa) ent).isInShell())){
+        if(((ent instanceof Player) && !used && side == 1) || (ent instanceof Koopa && !used && (side == 3 || side == 4) && ((Koopa) ent).isInShell())) {
             Rectangle entCollision = new Rectangle(getX(), getY() - getHeight(), getWidth(), getHeight());
-            for(int i = 1; i < getGame().getNextIndex(); i++){
-                if(entCollision.intersects(getGame().getEntity(i).getBounds())){
+            for (int i = 1; i < getGame().getNextIndex(); i++) {
+                if (entCollision.intersects(getGame().getEntity(i).getBounds())) {
                     getGame().getEntity(i).kill(i, 0);
                 }
             }
-            imageID = 3;
-            if(mushroom) {
-                if(GameStats.getPowerupState() == 0) {
-                    getGame().addEntity(new SuperMushroom(Color.RED, getX() + 5, getY() - 16, 20, 20, getGame(), getGame().getNextIndex()));
-                }
-                else
-                    getGame().addEntity(new FireFlower(Color.RED, getX(), getY() - getHeight(), 20, 20, getGame(), getGame().getNextIndex()));
+            if (GameStats.getPowerupState() > 0 || ent instanceof Koopa) {
+                Color particleColor = new Color(255, 97, 29);
+                collideable = false;
+                visible = false;
+                used = true;
+                getGame().addEntity(new Particle(particleColor, getX(), getY(), 10, 10, getGame(), getGame().getNextIndex(), 120, -5, -15));
+                getGame().addEntity(new Particle(particleColor, getX(), getY() + getHeight(), 10, 10, getGame(), getGame().getNextIndex(), 120, -5, -15));
+                getGame().addEntity(new Particle(particleColor, getX() + getWidth(), getY(), 10, 10, getGame(), getGame().getNextIndex(), 120, 5, -15));
+                getGame().addEntity(new Particle(particleColor, getX() + getWidth(), getY() + getHeight(), 10, 10, getGame(), getGame().getNextIndex(), 120, 5, -15));
             }
-            else{
-                getGame().addEntity(new Particle(Color.YELLOW, getX(), getY(), getWidth(), getHeight(), getGame(), getGame().getNextIndex(), 30, 0, -15));
-                GameStats.incrementCoinCounter();
-                GameStats.incrementScore(100);
-            }
-            used = true;
         }
     }
 
@@ -119,7 +117,7 @@ public class QuestionTile extends Entity implements Tile {
 
     @Override
     public Tile cloneTile() {
-        return new QuestionTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0, visible, mushroom);
+        return new BrickTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0, visible);
     }
 
     public void interact(Entity ent){
@@ -140,7 +138,7 @@ public class QuestionTile extends Entity implements Tile {
     public void paint(Graphics g) {
         if(visible) {
             g.setColor(getColor());
-            g.drawImage(getGame().getSprite(imageID), getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(getGame().getSprite(6), getX(), getY(), getWidth(), getHeight(), null);
         }
 
 

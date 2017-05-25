@@ -23,6 +23,10 @@ public class Particle extends Entity {
 
     }
 
+    public boolean isEnemy(){
+        return false;
+    }
+
 
     public void update(int i) {
         frame++;

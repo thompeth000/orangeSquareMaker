@@ -6,11 +6,23 @@ public class GameStats {
     public static boolean play, editor, pause, death, gameOver, levelEnd, textFlicker;
     public static int score;
     public static int lives = 3;
+    public static int powerupState = 0; //0: Small, 1: Mushroom, 2: Fire Flower
     public static long deathStartTime;
     public static int coinCounter = 0;
+    public static int fireBallCount;
 
     public static boolean isEditor(){
         return editor;
+    }
+
+    public static void setPowerupState(int state){
+
+            powerupState = state;
+
+    }
+
+    public static int getPowerupState(){
+        return powerupState;
     }
 
     public static void incrementCoinCounter(){
@@ -59,6 +71,22 @@ public class GameStats {
 
     public static void resetLives(){
         lives = 3;
+    }
+
+    public static int getFireBallCount(){
+        return fireBallCount;
+    }
+
+    public static void resetFireBallCount(){
+        fireBallCount = 0;
+    }
+
+    public static void incrementFireBallCount(){
+        fireBallCount++;
+    }
+
+    public static void decrementFireBallCount(){
+        fireBallCount--;
     }
 
     public static void incrementLives(int num){

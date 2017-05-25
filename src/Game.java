@@ -23,7 +23,7 @@ public class Game extends JPanel implements ActionListener {
     static long gameTime;
     final int HEIGHTINTILES = 30;
     final int WIDTHINTILES = 40;
-    boolean click, dPressed, aPressed, pPressed, playerSpawnPlaced, wPressed, spacePressed, entityPlaced, eraseMode;
+    boolean click, dPressed, aPressed, pPressed, fPressed, playerSpawnPlaced, wPressed, spacePressed, entityPlaced, eraseMode;
     String selectedObjString = "Ground Tile";
     final int SIMULATIONRADIUS = 500;
 
@@ -75,6 +75,10 @@ public class Game extends JPanel implements ActionListener {
                 aPressed = true;
                 }
 
+                if (e.getKeyCode() == KeyEvent.VK_F) {
+                    fPressed = true;
+                }
+
                 if(e.getKeyCode() == KeyEvent.VK_1 && GameStats.isEditor()){
                     selectedObjString = "Ground Tile";
                     updateSelectedTile();
@@ -120,9 +124,13 @@ public class Game extends JPanel implements ActionListener {
                     updateSelectedTile();
                 }
 
-
-
                 if(e.getKeyCode() == KeyEvent.VK_0 && GameStats.isEditor()){
+                    selectedObjString = "Brick Block";
+                    updateSelectedTile();
+                }
+
+
+                if(e.getKeyCode() == KeyEvent.VK_E && GameStats.isEditor()){
                     selectedObjString = "Erase";
                     updateSelectedTile();
                 }
@@ -143,6 +151,7 @@ public class Game extends JPanel implements ActionListener {
                             GameStats.resetScore();
                             GameStats.resetLives();
                             GameStats.resetCoins();
+                            GameStats.resetFireBallCount();
                             resetTiles();
                             purgeEntities();
                             resetEntities();
@@ -165,6 +174,10 @@ public class Game extends JPanel implements ActionListener {
 
                 if(e.getKeyCode() == KeyEvent.VK_A){
                     aPressed = false;
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_F) {
+                    fPressed = false;
                 }
 
 
@@ -249,6 +262,15 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
+    public int getSimulationRadius(){
+        return SIMULATIONRADIUS;
+    }
+
+
+    public boolean isFPressed(){
+        return fPressed;
+    }
+
     public int getControlVar(){
         return gameLoopControl;
     }
@@ -309,6 +331,20 @@ public class Game extends JPanel implements ActionListener {
             System.out.println("Image not found!");
         }
 
+        try {
+            spriteSheet[5] = ImageIO.read(new File("resource/fireFlower.png"));
+        }
+        catch(java.io.IOException e){
+            System.out.println("Image not found!");
+        }
+
+        try {
+            spriteSheet[6] = ImageIO.read(new File("resource/brickBlock.png"));
+        }
+        catch(java.io.IOException e){
+            System.out.println("Image not found!");
+        }
+
     }
 
     public void initGame(){
@@ -329,6 +365,7 @@ public class Game extends JPanel implements ActionListener {
             levelLength = findLevelLength();
             GameStats.setPlay();
             cameraOffset = playerSpawnOffset;
+            GameStats.resetFireBallCount();
             resetEntities();
             purgeEntities();
             entities.get(0).setX(playerSpawnX);
@@ -611,6 +648,9 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
                 break;
             case "? Block (Coin)":
                 selectedObject = new QuestionTile(Color.YELLOW, 0, 0, 20, 20, this, 0, true, false);
+                break;
+            case "Brick Block":
+                selectedObject = new BrickTile(Color.YELLOW, 0, 0, 20, 20, this, 0, true);
                 break;
             default:
                 selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);

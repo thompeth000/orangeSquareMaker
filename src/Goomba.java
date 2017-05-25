@@ -31,6 +31,10 @@ public class Goomba extends Entity {
         return new Goomba(getColor(), x, y, getWidth(), getHeight(), getGame(), getGame().getNextIndex());
     }
 
+    public boolean isEnemy(){
+        return true;
+    }
+
 
     public void update(int i) {
         updateTileMap();

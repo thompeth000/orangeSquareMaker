@@ -79,6 +79,10 @@ import java.awt.*;
 
         }
 
+        public boolean isEnemy(){
+            return true;
+        }
+
 
 
         public boolean checkWallCollision() {

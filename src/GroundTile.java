@@ -124,6 +124,10 @@ public class GroundTile extends Entity implements Tile {
 
     }
 
+    public boolean isEnemy(){
+        return false;
+    }
+
     public void kill(int i, int deathType){
 
     }

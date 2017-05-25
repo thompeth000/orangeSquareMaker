@@ -28,6 +28,10 @@ public class PlayerStartTile extends Entity implements Tile {
 
     }
 
+    public boolean isEnemy(){
+        return false;
+    }
+
     @Override
     public void offsetPos(int offset) {
         setX((getX()) - (offset % 20));

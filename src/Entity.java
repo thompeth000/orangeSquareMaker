@@ -55,6 +55,8 @@ public abstract class Entity {
 
     public abstract void reset();
 
+    public abstract boolean isEnemy();
+
 
 
     public Entity(Color color, int x, int y, int width, int height, Game game, int index) {

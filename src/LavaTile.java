@@ -93,6 +93,10 @@ public class LavaTile extends Entity implements Tile {
 
     }
 
+    public boolean isEnemy(){
+        return false;
+    }
+
     @Override
     public Tile cloneTile() {
         return new LavaTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);

@@ -4,8 +4,9 @@ import java.awt.*;
  * Created by thompeth000 on 4/20/2017.
  */
 public class Player extends Entity {
-    private boolean big;
+
     private int invincibilityTimer;
+    private int bulletSpamTimer;
 
 
     public Player(Color color, int x, int y, int width, int height, Game game, int index){
@@ -14,13 +15,6 @@ public class Player extends Entity {
 
     }
 
-    public void setBig(){
-        if(!big) {
-            big = true;
-            setHeight(getHeight() * 2);
-            setY(getY() - (getHeight() / 2));
-        }
-    }
 
 
 
@@ -58,13 +52,25 @@ public class Player extends Entity {
     public void update(int i) {
         updateTileMap();
 
+        if(bulletSpamTimer > 0){
+            bulletSpamTimer--;
+        }
+
 if(!isDead()) {
     if (getGame().isaPressed()) {
         setDx(-5);
+        setWalkingLeft(true);
     } else if (getGame().isdPressed()) {
         setDx(5);
+        setWalkingLeft(false);
     } else {
         setDx(0);
+    }
+
+    if(getGame().isFPressed() && GameStats.getPowerupState() == 2 && bulletSpamTimer <= 0 && GameStats.getFireBallCount() < 2){
+        getGame().addEntity(new Fireball(Color.RED, getX() + (getWidth() / 2), getY() + (getHeight() / 2), 15, 15, getGame(), getGame().getNextIndex(), isWalkingLeft()));
+        GameStats.incrementFireBallCount();
+        bulletSpamTimer = 15;
     }
 
     if(invincibilityTimer > 0){
@@ -91,7 +97,7 @@ if(!isDead()) {
             GameStats.setDeath(GameStats.getLives() == 0);
             setDx(0);
             setDy(0);
-            big = false;
+            GameStats.setPowerupState(0);
             setHeight(20);
 
         }
@@ -107,6 +113,10 @@ if(!isDead()) {
 
     public boolean isPlayerObject() {
         return true;
+    }
+
+    public boolean isEnemy(){
+        return false;
     }
 
     @Override
@@ -142,17 +152,23 @@ if(!isDead()) {
 
     public void reset(){
         invincibilityTimer = 0;
-        big = false;
+        setColor(Color.ORANGE);
+        GameStats.setPowerupState(0);
         setHeight(20);
     }
 
     public void kill(int i, int deathType){
-        if(big && deathType == 0){
+        if(GameStats.getPowerupState() == 1  && deathType == 0){
             setY(getY() + (getHeight() / 2));
             setHeight(20);
             invincibilityTimer = 60;
-            big = false;
-        }else {
+            GameStats.setPowerupState(0);
+        }
+        else if(GameStats.getPowerupState() == 2 && deathType == 0){
+            invincibilityTimer = 60;
+            setColor(Color.ORANGE);
+            GameStats.setPowerupState(1);
+        }else{
             setDead(true);
             setDx(0);
             setDy(-10);

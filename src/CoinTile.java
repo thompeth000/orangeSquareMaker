@@ -17,6 +17,10 @@ public class CoinTile extends Entity implements Tile {
 
     }
 
+    public boolean isEnemy(){
+        return false;
+    }
+
     public Entity clone(int originY, int originX){
         return null;
     }
