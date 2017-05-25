@@ -159,6 +159,15 @@ public class Game extends JPanel implements ActionListener {
                         }
                      }
 
+                if (e.getKeyCode() == KeyEvent.VK_C) {
+                    if(GameStats.isTitle()){
+                        GameStats.setControls();
+                    }
+                    else if(GameStats.isControls()){
+                        GameStats.setTitle();
+                    }
+                }
+
 
             }
 
@@ -485,6 +494,22 @@ public class Game extends JPanel implements ActionListener {
             }
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
             printSimpleString("By Ethan Thompson, 2017", getWidth(), -200, 570, g);
+            printSimpleString("Press C for controls.", getWidth(), 230, 570, g);
+        }
+
+        if(GameStats.isControls()){
+            setBackground(Color.BLACK);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 64));
+            printSimpleString("CONTROLS", getWidth(), 0, 100, g);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 24));
+            printSimpleString("0-9: Select Block", getWidth(), 0, 150, g);
+            printSimpleString("E: Erase", getWidth(), 0, 210, g);
+            printSimpleString("P: Switch Between Playing and Editing", getWidth(), 0, 270, g);
+            printSimpleString("W, A, and D: Move", getWidth(), 0, 330, g);
+            printSimpleString("F: Shoot Fireball", getWidth(), 0, 390, g);
+            printSimpleString("Press C to return to title.", getWidth(), 0, 570, g);
+
         }
 
     }

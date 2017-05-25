@@ -3,7 +3,7 @@
  */
 public class GameStats {
     public static boolean title = true;
-    public static boolean play, editor, pause, death, gameOver, levelEnd, textFlicker;
+    public static boolean play, editor, pause, controls, death, gameOver, levelEnd, textFlicker;
     public static int score;
     public static int lives = 3;
     public static int powerupState = 0; //0: Small, 1: Mushroom, 2: Fire Flower
@@ -103,6 +103,10 @@ public class GameStats {
 
     public static boolean isDeath(){return death;}
 
+    public static boolean isControls(){
+        return controls;
+    }
+
     public static void setPlay(){
         play = true;
         pause = false;
@@ -111,6 +115,7 @@ public class GameStats {
         gameOver = false;
         levelEnd = false;
         title = false;
+        controls = false;
     }
 
     public static void setEditor(){
@@ -121,6 +126,7 @@ public class GameStats {
         gameOver = false;
         levelEnd = false;
         title = false;
+        controls = false;
     }
 
     public static void setPause(){
@@ -131,6 +137,7 @@ public class GameStats {
         gameOver = false;
         levelEnd = false;
         title = false;
+        controls = false;
     }
 
     public static void setDeath(boolean outOfLives){
@@ -142,6 +149,7 @@ public class GameStats {
             gameOver = false;
             levelEnd = false;
             title = false;
+            controls = false;
         }
         else{
             play = false;
@@ -151,6 +159,7 @@ public class GameStats {
             gameOver = true;
             levelEnd = false;
             title = false;
+            controls = false;
             lives = 3;
             score = 0;
         }
@@ -165,6 +174,7 @@ public class GameStats {
         gameOver = false;
         levelEnd = true;
         title = false;
+        controls = false;
     }
 
     public static void setTitle(){
@@ -175,6 +185,18 @@ public class GameStats {
         gameOver = false;
         levelEnd = false;
         title = true;
+        controls = false;
+    }
+
+    public static void setControls(){
+        play = false;
+        pause = false;
+        editor = false;
+        death = false;
+        gameOver = false;
+        levelEnd = false;
+        title = false;
+        controls = true;
     }
 
     public static boolean isLevelEnd(){
