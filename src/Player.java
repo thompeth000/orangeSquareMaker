@@ -66,12 +66,12 @@ public class Player extends Entity {
 if(!isDead()) {
     if (getGame().isaPressed()) {
         if(getDx() > -5) {
-            setDx(getDx() - 0.5);
+            setDx(getDx() - 1);
         }
         setWalkingLeft(true);
     } else if (getGame().isdPressed()) {
         if(getDx() < 5){
-            setDx(getDx() + 0.5);
+            setDx(getDx() + 1);
         }
         setWalkingLeft(false);
     } else {
@@ -162,7 +162,7 @@ if(!isDead()) {
         }
         else {
             System.out.println("Scrolling");
-            getGame().scroll((int) Math.round(getDx()));
+            getGame().scroll((int)getDx());
         }
 
     }
