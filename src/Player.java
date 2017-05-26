@@ -142,12 +142,6 @@ if(!isDead()) {
     }
 
 
-
-    public boolean checkWallCollision() {
-        return false;
-    }
-
-
     public boolean isPlayerObject() {
         return true;
     }

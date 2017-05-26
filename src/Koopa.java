@@ -84,13 +84,7 @@ import java.awt.*;
         }
 
 
-
-        public boolean checkWallCollision() {
-            return false;
-        }
-
-
-        public boolean isPlayerObject() {
+    public boolean isPlayerObject() {
             return (inShell && !moving);
         }
 

@@ -63,12 +63,6 @@ public class SuperMushroom extends Entity {
     }
 
 
-
-    public boolean checkWallCollision() {
-        return false;
-    }
-
-
     public boolean isPlayerObject() {
         return true;
     }

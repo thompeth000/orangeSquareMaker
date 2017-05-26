@@ -12,11 +12,6 @@ public class LavaTile extends Entity implements Tile {
     }
 
     @Override
-    public void destroy() {
-
-    }
-
-    @Override
     public void setVisible(boolean a) {
         visible = a;
     }
@@ -47,11 +42,6 @@ public class LavaTile extends Entity implements Tile {
     @Override
     public TilePos getPos() {
         return new TilePos(getX() , getY(), false);
-    }
-
-    @Override
-    public TilePos getAbsPos() {
-        return null;
     }
 
     @Override
@@ -100,11 +90,6 @@ public class LavaTile extends Entity implements Tile {
     @Override
     public Tile cloneTile() {
         return new LavaTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
-    }
-
-
-    public boolean checkWallCollision() {
-        return false;
     }
 
 

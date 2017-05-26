@@ -66,12 +66,6 @@ public class Goomba extends Entity {
     }
 
 
-
-    public boolean checkWallCollision() {
-        return false;
-    }
-
-
     public boolean isPlayerObject() {
         return false;
     }

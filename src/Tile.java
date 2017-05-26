@@ -4,15 +4,11 @@ import java.awt.*;
  */
 public interface Tile {
 
-    public void destroy();
-
     public void setPos(int row, int col);
 
     public void setPos(TilePos position);
 
     public TilePos getPos();
-
-    public TilePos getAbsPos();
 
     public Rectangle getBounds();
 

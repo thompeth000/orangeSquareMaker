@@ -1,7 +1,4 @@
 import java.awt.*;
-import javax.imageio.*;
-import java.awt.image.*;
-import java.io.*;
 
 /**
  * Created by thompeth000 on 4/14/2017.
@@ -15,11 +12,6 @@ public class GroundTile extends Entity implements Tile {
 
     public GroundTile(Color color, int x, int y, int width, int height, Game game, int index){
         super(color, x, y, width, height, game, index);
-
-    }
-
-    @Override
-    public void destroy() {
 
     }
 
@@ -61,11 +53,6 @@ public class GroundTile extends Entity implements Tile {
     }
 
     @Override
-    public TilePos getAbsPos() {
-        return null;
-    }
-
-    @Override
     public boolean isCollideable() {
         return true;
     }
@@ -102,11 +89,6 @@ public class GroundTile extends Entity implements Tile {
     @Override
     public void reset(){
 
-    }
-
-
-    public boolean checkWallCollision() {
-        return false;
     }
 
 

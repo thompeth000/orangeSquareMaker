@@ -35,7 +35,7 @@ public class Game extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(800,600));
         setBackground(BACKCOLOR);
         tileMap = new Tile[30][2000];
-        spriteSheet = new BufferedImage[128];
+        spriteSheet = new BufferedImage[8];
         cameraOffset = 0;
         gameTime = 0;
         playerSpawnPlaced = false;
@@ -685,7 +685,6 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     }
 
     private void printSimpleString(String s, int width, int xPos, int yPos, Graphics g2d){
-        //Contrary to the name, this actually makes things harder...
         int stringLen = (int)g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
         int start = width / 2 - stringLen / 2;
         g2d.drawString(s, start + xPos, yPos);

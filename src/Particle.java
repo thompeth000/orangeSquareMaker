@@ -48,11 +48,6 @@ public class Particle extends Entity {
     }
 
 
-    public boolean checkWallCollision() {
-        return false;
-    }
-
-
     public Entity clone(int y, int x) {
         return null;
     }

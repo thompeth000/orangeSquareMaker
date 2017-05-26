@@ -75,12 +75,6 @@ public class Fireball extends Entity {
     }
 
 
-
-    public boolean checkWallCollision() {
-        return false;
-    }
-
-
     public boolean isPlayerObject() {
         return true;
     }

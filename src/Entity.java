@@ -92,8 +92,6 @@ public abstract class Entity {
 
     public abstract void kill(int i, int deathType);
 
-    public abstract boolean checkWallCollision();
-
     public void decrementIndex(){
         index--;
     }
@@ -109,9 +107,7 @@ public abstract class Entity {
 
 
 
-    public double calcMovementVector(){
-        return Math.atan2(dy, dx);
-    }
+
 
     public void doTileCollisions(){
 

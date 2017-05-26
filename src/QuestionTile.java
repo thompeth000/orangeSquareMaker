@@ -13,11 +13,6 @@ public class QuestionTile extends Entity implements Tile {
         this.mushroom = mushroom;
     }
 
-    @Override
-    public void destroy() {
-
-    }
-
     public Entity clone(int originY, int originX){
         return null;
     }
@@ -59,11 +54,6 @@ public class QuestionTile extends Entity implements Tile {
     @Override
     public TilePos getPos() {
         return new TilePos(getX() , getY(), false);
-    }
-
-    @Override
-    public TilePos getAbsPos() {
-        return null;
     }
 
     @Override
@@ -124,11 +114,6 @@ public class QuestionTile extends Entity implements Tile {
 
     public void interact(Entity ent){
 
-    }
-
-
-    public boolean checkWallCollision() {
-        return false;
     }
 
 

@@ -33,12 +33,6 @@ public class FireFlower extends Entity {
     }
 
 
-
-    public boolean checkWallCollision() {
-        return false;
-    }
-
-
     public boolean isPlayerObject() {
         return true;
     }

@@ -11,11 +11,6 @@ public class AirTile extends Entity implements Tile {
     }
 
     @Override
-    public void destroy() {
-
-    }
-
-    @Override
     public void setVisible(boolean a) {
 
     }
@@ -62,11 +57,6 @@ public class AirTile extends Entity implements Tile {
     }
 
     @Override
-    public TilePos getAbsPos() {
-        return null;
-    }
-
-    @Override
     public boolean isCollideable() {
         return false;
     }
@@ -93,11 +83,6 @@ public class AirTile extends Entity implements Tile {
     @Override
     public Tile cloneTile() {
         return new AirTile(getColor(), getX(), getY(), getHeight(), getWidth(), getGame(), 0);
-    }
-
-
-    public boolean checkWallCollision() {
-        return false;
     }
 
 

@@ -12,11 +12,6 @@ public class CoinTile extends Entity implements Tile {
         visible = vis;
     }
 
-    @Override
-    public void destroy() {
-
-    }
-
     public boolean isEnemy(){
         return false;
     }
@@ -65,11 +60,6 @@ public class CoinTile extends Entity implements Tile {
     }
 
     @Override
-    public TilePos getAbsPos() {
-        return null;
-    }
-
-    @Override
     public boolean isCollideable() {
         return false;
     }
@@ -106,11 +96,6 @@ public class CoinTile extends Entity implements Tile {
 
     public void interact(Entity ent){
 
-    }
-
-
-    public boolean checkWallCollision() {
-        return false;
     }
 
 
