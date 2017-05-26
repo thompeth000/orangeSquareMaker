@@ -14,7 +14,6 @@ import java.awt.*;
             super(color, x, y, width, height, game, index);
             moving = true;
 
-            setDx(-4);
 
         }
 
@@ -146,6 +145,7 @@ import java.awt.*;
         public void reset(){
             inShell = false;
             moving = true;
+            setDx(-4);
         }
     }
 

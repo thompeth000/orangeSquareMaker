@@ -51,6 +51,8 @@ public abstract class Entity {
         airborne = false;
         walkingLeft = true;
         active = false;
+        dx = 0;
+        dy = 0;
         reset();
     }
 
@@ -77,7 +79,7 @@ public abstract class Entity {
         ORIGINY = y;
         this.width = width;
         this.height = height;
-        dx = 10;
+
 
 
         if(!(this instanceof Tile)) {

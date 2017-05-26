@@ -188,6 +188,9 @@ if(!isDead()) {
         setHeight(20);
         setDx(0);
         setDy(0);
+        jumping = false;
+        jumpTimer = 0;
+        setAirborne(true);
     }
 
     public void kill(int i, int deathType){

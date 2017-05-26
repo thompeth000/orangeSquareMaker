@@ -10,7 +10,6 @@ public class Goomba extends Entity {
     public Goomba(Color color, int x, int y, int width, int height, Game game, int index){
         super(color, x, y, width, height, game, index);
 
-        setDx(-4);
 
     }
 
@@ -21,7 +20,7 @@ public class Goomba extends Entity {
     }
 
     public void reset(){
-
+        setDx(-4);
     }
 
 
