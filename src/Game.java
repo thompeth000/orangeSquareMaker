@@ -580,8 +580,13 @@ public class Game extends JPanel implements ActionListener {
 
    if(GameStats.isPlay()){
        for(gameLoopControl = 0; gameLoopControl < getNextIndex(); gameLoopControl++){
-           if(Math.abs(entities.get(gameLoopControl).getX() - (getWidth() / 2)) < SIMULATIONRADIUS)
-           entities.get(gameLoopControl).update(gameLoopControl);
+           if(Math.abs(entities.get(gameLoopControl).getX() - (getWidth() / 2)) < SIMULATIONRADIUS && !entities.get(gameLoopControl).isActive()){
+               entities.get(gameLoopControl).activate();
+           }
+
+           if(entities.get(gameLoopControl).isActive()) {
+               entities.get(gameLoopControl).update(gameLoopControl);
+           }
        }
    }
 

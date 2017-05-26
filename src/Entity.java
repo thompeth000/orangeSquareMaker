@@ -9,7 +9,7 @@ public abstract class Entity {
 
     private boolean dead;
 
-    private boolean airborne, walkingLeft;
+    private boolean airborne, walkingLeft, active;
     private int x, y, width, height, index;
     private final int ORIGINX;
     private final int ORIGINY;
@@ -50,12 +50,21 @@ public abstract class Entity {
         dead = false;
         airborne = false;
         walkingLeft = true;
+        active = false;
         reset();
     }
 
     public abstract void reset();
 
     public abstract boolean isEnemy();
+
+    public boolean isActive(){
+        return active;
+    }
+
+    public void activate(){
+        active = true;
+    }
 
 
 
