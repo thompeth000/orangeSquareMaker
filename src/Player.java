@@ -6,7 +6,10 @@ import java.awt.*;
 public class Player extends Entity {
 
     private int invincibilityTimer;
-    private int bulletSpamTimer;
+    private int fireballSpamTimer;
+    private boolean jumping;
+    private int jumpTimer;
+
 
 
     public Player(Color color, int x, int y, int width, int height, Game game, int index){
@@ -30,6 +33,10 @@ public class Player extends Entity {
                     if (getX() - getDx() + getWidth() > ent.getX() - ent.getDx() && getX() - getDx() < ent.getX() + ent.getWidth() - ent.getDx() && getY() - getDy() + getHeight() > ent.getHeight()) {
                         ent.kill(k, 1);
                         setDy(-10);
+                        if(getGame().iswPressed()){
+                            jumping = true;
+                            jumpTimer = 15;
+                        }
                         GameStats.incrementScore(100);
 
                     } else
@@ -52,25 +59,41 @@ public class Player extends Entity {
     public void update(int i) {
         updateTileMap();
 
-        if(bulletSpamTimer > 0){
-            bulletSpamTimer--;
+        if(fireballSpamTimer > 0){
+            fireballSpamTimer--;
         }
 
 if(!isDead()) {
     if (getGame().isaPressed()) {
-        setDx(-5);
+        if(getDx() > -5) {
+            setDx(getDx() - 0.5);
+        }
         setWalkingLeft(true);
     } else if (getGame().isdPressed()) {
-        setDx(5);
+        if(getDx() < 5){
+            setDx(getDx() + 0.5);
+        }
         setWalkingLeft(false);
     } else {
-        setDx(0);
+        if(!isAirborne()) {
+            if(getDx() > 0) {
+                setDx(getDx() - 2);
+                if(getDx() < 0)
+                    setDx(0);
+            }
+            else if(getDx() < 0){
+                setDx(getDx() + 2);
+                if(getDx() > 0)
+                    setDx(0);
+            }
+
+        }
     }
 
-    if(getGame().isFPressed() && GameStats.getPowerupState() == 2 && bulletSpamTimer <= 0 && GameStats.getFireBallCount() < 2){
+    if(getGame().isFPressed() && GameStats.getPowerupState() == 2 && fireballSpamTimer <= 0 && GameStats.getFireBallCount() < 2){
         getGame().addEntity(new Fireball(Color.RED, getX() + (getWidth() / 2), getY() + (getHeight() / 2), 15, 15, getGame(), getGame().getNextIndex(), isWalkingLeft()));
         GameStats.incrementFireBallCount();
-        bulletSpamTimer = 15;
+        fireballSpamTimer = 15;
     }
 
     if(invincibilityTimer > 0){
@@ -79,7 +102,19 @@ if(!isDead()) {
 
     if (getGame().iswPressed() && !isAirborne()) {
         setAirborne(true);
-        setDy(-15);
+        setDy(-10);
+        jumping = true;
+        jumpTimer = 10;
+    }
+
+    if(jumpTimer <= 0 || !getGame().iswPressed() || !isAirborne() || getDy() >= 0){
+        jumping = false;
+        jumpTimer = 0;
+    }
+
+    if(jumping){
+        setDy(-10);
+        jumpTimer--;
     }
 }
 
@@ -90,6 +125,8 @@ if(!isDead()) {
     if(!isDead()) {
         checkCollisions(i);
     }
+
+
         move();
 
         if(getY() > 600){
@@ -155,6 +192,8 @@ if(!isDead()) {
         setColor(Color.ORANGE);
         GameStats.setPowerupState(0);
         setHeight(20);
+        setDx(0);
+        setDy(0);
     }
 
     public void kill(int i, int deathType){
