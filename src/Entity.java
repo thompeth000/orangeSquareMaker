@@ -143,24 +143,19 @@ public abstract class Entity {
                         if (x >= collideableTiles[j][k].getX() + 10 && betweenVert) {
                             if (collideableTiles[j][k].isCollideable()) {
                                 x = collideableTiles[j][k].getX() + 20;
-                                System.out.println("Collision 3");
                                 dx = 0;
-
                             }
                             collideableTiles[j][k].interact(this, 3);
                         } else if (x + width <= collideableTiles[j][k].getX() + 10 && betweenVert) {
                             if (collideableTiles[j][k].isCollideable()) {
                                 x = collideableTiles[j][k].getX() - width;
                                 dx = 0;
-
-                                System.out.println("Collision 4");
                             }
                             collideableTiles[j][k].interact(this, 4);
                         } else if (y >= collideableTiles[j][k].getY() + 10 && betweenHoriz) {
                             if (collideableTiles[j][k].isCollideable()) {
                                 y = collideableTiles[j][k].getY() + 20;
                                 dy = 0;
-                                System.out.println("Collision 1");
                             }
                             collideableTiles[j][k].interact(this, 1);
                         } else if (y + height <= collideableTiles[j][k].getY() + 10 && betweenHoriz) {
@@ -168,7 +163,6 @@ public abstract class Entity {
                                 y = collideableTiles[j][k].getY() - height;
                                 dy = 0;
                                 airborne = false;
-                                System.out.println("Collision 2");
                             }
                             collideableTiles[j][k].interact(this, 2);
                         }

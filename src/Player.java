@@ -157,11 +157,9 @@ if(!isDead()) {
         updateY(getDy());
 
         if((absX < 400 || absX > 39600) && !(getGame().getCameraOffset() > 0 && getGame().getCameraOffset() < 39200)){
-            System.out.println(absX);
             updateX(getDx());
         }
         else {
-            System.out.println("Scrolling");
             getGame().scroll((int)getDx());
         }
 
