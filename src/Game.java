@@ -419,6 +419,9 @@ public class Game extends JPanel implements ActionListener {
             if(!playerSpawnPlaced){
                 printSimpleString("Spawn location not specified.", getWidth(), -160, 570, g);
             }
+            else {
+                printSimpleString("Press P to start!", getWidth(), -250, 570, g);
+            }
             for (int i = 1; i < entities.size(); i++) {
                 getEntity(i).paint(g);
             }
@@ -459,8 +462,10 @@ public class Game extends JPanel implements ActionListener {
             setBackground(Color.BLACK);
             g.setColor(Color.WHITE);
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
-            printSimpleString("Score: " + GameStats.getScore(), getWidth(), -300, 20, g);
-            printSimpleString("GAME OVER", getWidth(), 0, 300, g);
+            if(GameStats.getTextFlicker()) {
+                printSimpleString("GAME OVER", getWidth(), 0, 300, g);
+                printSimpleString("PRESS SPACE TO CONTINUE", getWidth(), 0, 320, g);
+            }
         }
 
         if(GameStats.isLevelEnd()){
@@ -507,7 +512,10 @@ public class Game extends JPanel implements ActionListener {
             printSimpleString("P: Switch Between Playing and Editing", getWidth(), 0, 270, g);
             printSimpleString("W, A, and D: Move", getWidth(), 0, 330, g);
             printSimpleString("F: Shoot Fireball", getWidth(), 0, 390, g);
+            printSimpleString("Left Click: Place Tile", getWidth(), 0, 450, g);
             printSimpleString("Press C to return to title.", getWidth(), 0, 570, g);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 14));
+            printSimpleString("Hold down the left mouse button and A or D at the same time to place tiles quickly!", getWidth(), 0, 510, g);
 
         }
 
@@ -589,8 +597,8 @@ public class Game extends JPanel implements ActionListener {
        }
    }
 
-   if(GameStats.isDeath()|| GameStats.isGameOver()){
-       if(gameTime - GameStats.getDeathStartTime() > 120){
+   if(GameStats.isDeath() || GameStats.isGameOver()){
+       if((GameStats.isDeath() && gameTime - GameStats.getDeathStartTime() > 120) || (GameStats.isGameOver() && spacePressed)){
            startGame();
            (entities.get(0)).setDead(false);
 
