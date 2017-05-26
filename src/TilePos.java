@@ -12,7 +12,7 @@ public class TilePos {
         }
         else{
             row = (int)(y / 30);
-            col = (int)(x / 2048);
+            col = (int)(x / 2000);
         }
 
     }
@@ -25,8 +25,5 @@ public class TilePos {
         return row;
     }
 
-    public int getRelativeCol(){
-        return 5;
-    }
 
 }

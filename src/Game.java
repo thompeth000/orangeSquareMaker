@@ -19,7 +19,7 @@ public class Game extends JPanel implements ActionListener {
     Tile[][] tileMap;
     BufferedImage[] spriteSheet;
     Entity selectedObject = new GroundTile(Color.GREEN, 0, 0, 20, 20, this, 0);
-    int cursorX, cursorY, cameraOffset, gameLoopControl, levelLength, playerSpawnX, playerSpawnY, playerSpawnOffset, entCount;
+    int cursorX, cursorY, cameraOffset, gameLoopControl, playerSpawnX, playerSpawnY, playerSpawnOffset, entCount;
     static long gameTime;
     final int HEIGHTINTILES = 30;
     final int WIDTHINTILES = 40;
@@ -371,7 +371,6 @@ public class Game extends JPanel implements ActionListener {
     public void startGame(){
         if(playerSpawnPlaced) {
             resetTiles();
-            levelLength = findLevelLength();
             GameStats.setPlay();
             cameraOffset = playerSpawnOffset;
             GameStats.resetFireBallCount();
@@ -740,23 +739,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
         tileMap[pos.getRow()][pos.getCol()] = newTile.cloneTile();
     }
 
-    public int findLevelLength(){
 
-
-        for(int i = tileMap.length - 1; i >= 0; i--){
-            for(int j = tileMap[0].length - 1; j >= 0; j--){
-                if(!(tileMap[i][j] instanceof AirTile)){
-                    System.out.println(i * 20);
-                    return (i + 1) * 20;
-                }
-            }
-        }
-        return 0;
-    }
-
-    public int getLevelLength(){
-        return levelLength;
-    }
 
     public void scroll(int a){
         cameraOffset += a;
