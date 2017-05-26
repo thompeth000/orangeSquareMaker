@@ -20,6 +20,7 @@ public class Goomba extends Entity {
     }
 
     public void reset(){
+        if(getX() > getGame().getPlayerSpawnX())
         setDx(-4);
     }
 

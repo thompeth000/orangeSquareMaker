@@ -145,6 +145,7 @@ import java.awt.*;
         public void reset(){
             inShell = false;
             moving = true;
+            if(getX() > getGame().getPlayerSpawnX())
             setDx(-4);
         }
     }

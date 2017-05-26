@@ -702,6 +702,10 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
         cameraOffset += a;
     }
 
+    public int getPlayerSpawnX(){
+        return playerSpawnX;
+    }
+
     public void addEntity(Entity ent){
         entities.add(ent);
     }
