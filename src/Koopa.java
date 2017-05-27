@@ -27,8 +27,11 @@ import java.awt.*;
                     for(int a = 1; a < getGame().getNextIndex(); a++){
                         if(a == getIndex())
                             a++;
-                        if(a < getGame().getNextIndex() && getBounds().intersects(getGame().getEntity(a).getBounds()) && !getGame().getEntity(a).isDead())
+                        if(a < getGame().getNextIndex() && getBounds().intersects(getGame().getEntity(a).getBounds()) && !getGame().getEntity(a).isDead() && (getGame().getEntity(a).isEnemy() || getGame().getEntity(a) instanceof Player)) {
                             getGame().getEntity(a).kill(a, 0);
+                            if (!(getGame().getEntity(a) instanceof Player))
+                                GameStats.incrementScore(100);
+                        }
                     }
                 }
             }

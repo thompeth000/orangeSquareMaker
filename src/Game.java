@@ -204,6 +204,12 @@ public class Game extends JPanel implements ActionListener {
                 cursorX = e.getX();
                 cursorY = e.getY();
             }
+
+            @Override
+            public void mouseDragged(MouseEvent e){
+                cursorX = e.getX();
+                cursorY = e.getY();
+            }
         });
 
         addMouseListener(new MouseInputAdapter() {

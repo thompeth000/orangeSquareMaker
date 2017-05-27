@@ -24,6 +24,7 @@ public class Fireball extends Entity {
             if(!entFound && getGame().getEntity(k).isEnemy() && !getGame().getEntity(k).isDead() && getBounds().intersects(getGame().getEntity(k).getBounds())) {
                 getGame().getEntity(k).kill(k, 0);
                 GameStats.decrementFireBallCount();
+                GameStats.incrementScore(100);
                 remove(i);
                 entFound = true;
             }
