@@ -43,7 +43,7 @@ public class Game extends JPanel implements ActionListener {
         entCount = 1;
 
 
-
+        //Used to prevent a null pointer exception when rendering the tilemap
         for(int i = 0; i < tileMap.length; i++){
             for(int j = 0; j < tileMap[i].length; j++){
                 tileMap[i][j] = new AirTile(Color.BLUE, j * 20, i * 20, 20, 20, this, 0);
@@ -140,10 +140,7 @@ public class Game extends JPanel implements ActionListener {
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_P) {
-
-
-
-
+                    //Switches between playing and editing
                         if (GameStats.isEditor()) {
                             startGame();
                         } else if(GameStats.isPlay()) {
@@ -375,6 +372,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void startGame(){
+        //Resets the game to its default state
         if(playerSpawnPlaced) {
             resetTiles();
             GameStats.setPlay();
@@ -411,6 +409,7 @@ public class Game extends JPanel implements ActionListener {
         setBackground(BACKCOLOR);
 
         if(GameStats.isEditor() || GameStats.isPlay()) {
+            //Only paints the tiles within the bounds of the game window
             for (int i = 0; i < HEIGHTINTILES; i++) {
                 for (int k = 0; k < WIDTHINTILES; k++) {
                     getTile(i, (cameraOffset / 20) + k).paint(g);
@@ -420,7 +419,6 @@ public class Game extends JPanel implements ActionListener {
         if(GameStats.isEditor()) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Lucida Console", Font.BOLD, 24));
-            // printSimpleString(selectedObjString, getWidth(), -300, 20, g);
             g.drawString(selectedObjString, 10, 20);
             if(!playerSpawnPlaced){
                 printSimpleString("Spawn location not specified.", getWidth(), -160, 570, g);
@@ -428,6 +426,7 @@ public class Game extends JPanel implements ActionListener {
             else {
                 printSimpleString("Press P to start!", getWidth(), -250, 570, g);
             }
+            //Paints all entities except for the player
             for (int i = 1; i < entities.size(); i++) {
                 getEntity(i).paint(g);
             }
@@ -445,13 +444,7 @@ public class Game extends JPanel implements ActionListener {
             printSimpleString("X " + GameStats.getCoinCounter(), getWidth(), -300, 80, g);
 
 
-/*
-            for (int i = 0; i < entities.get(0).getTileMap().length; i++) {
-                for (int k = 0; k < entities.get(0).getTileMap()[i].length; k++) {
-                    entities.get(0).getTile(i,k).paint(g);
-                }
-            }
-*/
+
 
 
         }
@@ -520,8 +513,8 @@ public class Game extends JPanel implements ActionListener {
             printSimpleString("F: Shoot Fireball", getWidth(), 0, 390, g);
             printSimpleString("Left Click: Place Tile", getWidth(), 0, 450, g);
             printSimpleString("Press C to return to title.", getWidth(), 0, 570, g);
-            g.setFont(new Font("Lucida Console", Font.BOLD, 14));
-            printSimpleString("Hold down the left mouse button and A or D at the same time to place tiles quickly!", getWidth(), 0, 510, g);
+            g.setFont(new Font("Lucida Console", Font.BOLD, 16));
+            printSimpleString("You can also drag the mouse around to place tiles quickly!", getWidth(), 0, 510, g);
 
         }
 
@@ -567,6 +560,7 @@ public class Game extends JPanel implements ActionListener {
        if (click) {
            boolean entityFound = false;
            if(eraseMode) {
+               //Erases either a tile, or an entity if one can be found at the cursor position.
                for(int i = 1; i < entities.size(); i++){
                    if(getEntity(i).getBounds().contains(cursorX, cursorY)){
                     removeEntity(i);
@@ -583,6 +577,7 @@ public class Game extends JPanel implements ActionListener {
                    setTile(cursorX, cursorY, cameraOffset, (Tile) selectedObject);
                } else if (!entityPlaced) {
                    entities.add(selectedObject.clone(cursorY, cursorX));
+                   //Only one entity can be placed at a time, hence the "entityPlaced" variable.
                    entityPlaced = true;
                    entCount++;
                }
@@ -594,6 +589,7 @@ public class Game extends JPanel implements ActionListener {
    if(GameStats.isPlay()){
        for(gameLoopControl = 0; gameLoopControl < getNextIndex(); gameLoopControl++){
            if(Math.abs(entities.get(gameLoopControl).getX() - (getWidth() / 2)) < SIMULATIONRADIUS && !entities.get(gameLoopControl).isActive()){
+               //Activates entities if they get within a certain radius of the center of the screen
                entities.get(gameLoopControl).activate();
            }
 
@@ -641,6 +637,7 @@ public class Game extends JPanel implements ActionListener {
 
     public void setTile(int x, int y, int offset, Tile selected){
 
+        //Finds the absolute X coordinate
         int newX = x + offset;
 
 if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
@@ -648,7 +645,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
         playerSpawnPlaced = false;
     }
     if(selected instanceof PlayerStartTile){
-
+        //Sets the player spawn location
         playerSpawnPlaced = true;
         playerSpawnOffset = offset;
         playerSpawnX = x;
@@ -661,6 +658,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     }
 
     public void updateSelectedTile(){
+        //Called whenever a key from 0-9 is pressed in edit mode.
         eraseMode = false;
         switch(selectedObjString){
             case "Erase":
@@ -726,6 +724,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
 
     public void removeEntity(int index){
         entities.remove(index);
+        //Decrements the index field of all entities beyond the index of the entity being deleted to keep the actual index and the stored index from becoming out of sync.
         for(int i = index; i < entities.size(); i++) {
             entities.get(i).decrementIndex();
         }
@@ -760,6 +759,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
 
 
     public void scroll(int a){
+        //Scrolls everything by a certain number of pixels along the X axis
         cameraOffset += a;
         for(int i = 1; i < entities.size(); i++){
             entities.get(i).setX(entities.get(i).getX() - a);
@@ -771,6 +771,7 @@ if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
     }
 
     public void purgeEntities(){
+        //Gets rid of particles, fireballs, e.t.c
         while(entities.size() > entCount){
             removeEntity(entCount);
         }

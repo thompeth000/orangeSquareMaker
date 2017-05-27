@@ -133,7 +133,7 @@ public abstract class Entity {
         for(int j = 0; j < collideableTiles.length; j++){
             for(int k = 0; k < collideableTiles[0].length; k++){
                 if(!(getTile(j,k) instanceof AirTile) && next.intersects(collideableTiles[j][k].getBounds())){
-
+                    //Finds whether the entity is oriented vertically or horizontally relative to the tile, and determines what side of the tile the entity is on based on this information
                     boolean betweenHoriz = (x + width > collideableTiles[j][k].getX() && x < collideableTiles[j][k].getX() + 20);
                     boolean betweenVert = (y + height > collideableTiles[j][k].getY() && y < collideableTiles[j][k].getY() + 20);
 
@@ -243,6 +243,7 @@ public abstract class Entity {
     }
 
     public void updateTileMap(){
+        //Determines which tiles the entity can collide with, avoiding the problem of having to check collisions with a bajillion or so tiles
         for(int i = 0; i < collideableTiles.length; i++){
             for(int j = 0; j < collideableTiles[0].length; j++){
                 collideableTiles[i][j] = game.getTile(((y - 10) / 20) + i, ((x - 20) / 20) + j + (getGame().getCameraOffset() / 20));

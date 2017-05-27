@@ -23,6 +23,7 @@ import java.awt.*;
             doTileCollisions();
 
             if(inShell && moving){
+                //Only hurts other entities if it is moving while in its shell
                 if(getDx() > 0 || getDx() < 0){
                     for(int a = 1; a < getGame().getNextIndex(); a++){
                         if(a == getIndex())

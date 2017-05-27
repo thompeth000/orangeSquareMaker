@@ -22,6 +22,7 @@ public class Fireball extends Entity {
         boolean entFound = false;
         for(int k = 1; k < getGame().getNextIndex(); k++){
             if(!entFound && getGame().getEntity(k).isEnemy() && !getGame().getEntity(k).isDead() && getBounds().intersects(getGame().getEntity(k).getBounds())) {
+                //Collision with enemies
                 getGame().getEntity(k).kill(k, 0);
                 GameStats.decrementFireBallCount();
                 GameStats.incrementScore(100);
@@ -51,11 +52,13 @@ public class Fireball extends Entity {
         updateTileMap();
 
         if(getY() > 600 || getDx() == 0 || Math.abs(getX() + getDx() - 400) > getGame().getSimulationRadius() - getWidth()){
+            //Despawns the fireball
             GameStats.decrementFireBallCount();
             remove(i);
         }
 
         if(!isAirborne()){
+            //Causes the fireball to bounce
             setAirborne(true);
             setDy(-10);
         }

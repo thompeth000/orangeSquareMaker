@@ -82,6 +82,7 @@ public class SuperMushroom extends Entity {
     public void interact(Entity ent){
         if(ent instanceof Player){
             if(GameStats.getPowerupState() == 0){
+                //Makes the player big
                 ent.setHeight(ent.getHeight() * 2);
                 ent.setY(ent.getY() - (ent.getHeight() / 2));
                 GameStats.setPowerupState(1);

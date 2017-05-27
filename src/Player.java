@@ -91,6 +91,7 @@ if(!isDead()) {
     }
 
     if(getGame().isFPressed() && GameStats.getPowerupState() == 2 && fireballSpamTimer <= 0 && GameStats.getFireBallCount() < 2){
+        //There can only be two fireballs active at once
         getGame().addEntity(new Fireball(Color.RED, getX() + (getWidth() / 2), getY() + (getHeight() / 2), 15, 15, getGame(), getGame().getNextIndex(), isWalkingLeft()));
         GameStats.incrementFireBallCount();
         fireballSpamTimer = 15;
@@ -152,6 +153,7 @@ if(!isDead()) {
 
     @Override
     public void move(){
+        //Overrides the default move method to account for the fact that the player scrolls the screen left and right
 
         int absX = getX() + getGame().getCameraOffset();
         updateY(getDy());
