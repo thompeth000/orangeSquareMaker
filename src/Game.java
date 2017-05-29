@@ -639,21 +639,22 @@ public class Game extends JPanel implements ActionListener {
 
         //Finds the absolute X coordinate
         int newX = x + offset;
+if(y >= 0 && y <= 600 && x >= 0 && x <= 800){
+    if (!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
+        if (tileMap[y / 20][(int) Math.floor(newX / 20.0)] instanceof PlayerStartTile) {
+            playerSpawnPlaced = false;
+        }
+        if (selected instanceof PlayerStartTile) {
+            //Sets the player spawn location
+            playerSpawnPlaced = true;
+            playerSpawnOffset = offset;
+            playerSpawnX = x;
+            playerSpawnY = y - entities.get(0).getHeight();
 
-if(!(playerSpawnPlaced && selected instanceof PlayerStartTile)) {
-    if(tileMap[y / 20][(int) Math.floor(newX / 20.0)] instanceof PlayerStartTile){
-        playerSpawnPlaced = false;
+        }
+        tileMap[y / 20][(int) Math.floor(newX / 20.0)] = selected.cloneTile();
+        tileMap[y / 20][(int) Math.floor(newX / 20.0)].setPos(new TilePos(newX, y, false));
     }
-    if(selected instanceof PlayerStartTile){
-        //Sets the player spawn location
-        playerSpawnPlaced = true;
-        playerSpawnOffset = offset;
-        playerSpawnX = x;
-        playerSpawnY = y - entities.get(0).getHeight();
-
-    }
-    tileMap[y / 20][(int) Math.floor(newX / 20.0)] = selected.cloneTile();
-    tileMap[y / 20][(int) Math.floor(newX / 20.0)].setPos(new TilePos(newX, y, false));
 }
     }
 
